@@ -1,332 +1,377 @@
 
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AmarOsud | Your Health, Our Priority</title>
+<title>AmarOsud | Your Health, One Platform</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:Arial,sans-serif;background:#f7faf8;color:#18352d;line-height:1.6}
-.container{width:90%;max-width:1100px;margin:auto}
-header{background:white;padding:16px 0;box-shadow:0 2px 12px #0001}
-nav{display:flex;justify-content:space-between;align-items:center}
-.logo{font-size:25px;font-weight:bold;color:#075c45}
-.logo span{color:#0b9b6b}
-button,.btn{background:#087f5b;color:white;border:0;padding:12px 20px;border-radius:8px;cursor:pointer;font-weight:bold;text-decoration:none}
-button:hover,.btn:hover{background:#075c45}
-.hero{padding:65px 0;background:#eaf7f0}
-.hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:35px;align-items:center}
-.hero h1{font-size:45px;line-height:1.2;margin-bottom:18px}
-.hero h1 span{color:#087f5b}
-.hero p{color:#60756b;margin-bottom:25px}
-.hero img{width:100%;height:300px;object-fit:cover;border-radius:20px}
-section{padding:55px 0}
-.heading{text-align:center;margin-bottom:30px}
-.heading h2{font-size:30px}
-.heading p{color:#718078}
-.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
-.card{background:white;padding:25px;border-radius:14px;border:1px solid #e5eee8}
-.card .emoji{font-size:30px;margin-bottom:10px}
-.card p{color:#718078;font-size:14px;margin-top:8px}
-.auth-section{background:#eaf7f0}
-.auth-box{background:white;max-width:480px;margin:auto;padding:28px;border-radius:16px;box-shadow:0 8px 30px #0001}
-.auth-box h2{text-align:center;margin-bottom:20px}
-input{width:100%;padding:13px;margin:8px 0 15px;border:1px solid #d9e5dd;border-radius:8px;font-size:15px}
-label{font-size:14px;font-weight:bold}
-.auth-box button{width:100%;margin-top:8px}
-.switch{text-align:center;margin-top:18px;font-size:14px}
-.switch a{color:#087f5b;font-weight:bold;cursor:pointer}
-.message{margin:12px 0;padding:10px;border-radius:8px;font-size:14px;display:none}
-.error{background:#ffe9e9;color:#a52a2a}
-.success{background:#e3f7ec;color:#075c45}
-.dashboard{max-width:650px;margin:auto;background:white;padding:28px;border-radius:16px}
-.profile-item{padding:14px 0;border-bottom:1px solid #e7eee9}
-footer{background:#102e25;color:white;text-align:center;padding:30px}
-.small{font-size:12px;color:#718078;margin-top:12px}
-@media(max-width:700px){
-.hero-grid{grid-template-columns:1fr}
-.hero h1{font-size:36px}
-.cards{grid-template-columns:1fr}
-.hero img{height:230px}
+:root{--green:#087f5b;--dark:#07543e;--light:#e9f7f1;--bg:#f5f8f7;--text:#18352b;--muted:#718078;--white:#fff;--border:#e3ebe7}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);font-family:Arial,sans-serif;color:var(--text)}
+button,input{font:inherit}
+button{cursor:pointer}
+.topbar{height:68px;background:white;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 5%;position:sticky;top:0;z-index:5}
+.logo{font-size:23px;font-weight:800;color:var(--green)}
+.logo span{color:#18352b}
+.top-actions{display:flex;gap:10px;align-items:center}
+.btn{border:0;border-radius:9px;padding:11px 17px;font-weight:700}
+.primary{background:var(--green);color:white}
+.secondary{background:var(--light);color:var(--green)}
+.outline{background:white;border:1px solid var(--border);color:var(--text)}
+.container{max-width:1150px;margin:auto;padding:28px 20px}
+.hero{background:linear-gradient(120deg,#07543e,#0b9870);border-radius:20px;padding:55px 35px;color:white;display:flex;align-items:center;justify-content:space-between;gap:25px;min-height:280px}
+.hero h1{font-size:40px;line-height:1.15;margin:0 0 15px}
+.hero p{max-width:570px;line-height:1.7;color:#e2f5ed}
+.hero .btn{background:white;color:var(--green);margin-top:10px}
+.hero-icon{font-size:100px}
+.section-title{margin:35px 0 17px;font-size:23px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.card{background:white;border:1px solid var(--border);border-radius:15px;padding:21px;box-shadow:0 3px 12px #173b2b08}
+.card h3{margin:10px 0 8px}
+.card p{color:var(--muted);font-size:14px;line-height:1.6}
+.service-icon{font-size:30px}
+.auth-wrap{max-width:440px;margin:45px auto;padding:0 16px}
+.auth-card{background:white;border:1px solid var(--border);border-radius:18px;padding:27px;box-shadow:0 8px 30px #173b2b0c}
+.auth-card h2{margin-top:0}
+.field{margin:14px 0}
+.field label{display:block;font-size:13px;font-weight:700;margin-bottom:7px}
+.field input{width:100%;padding:13px;border:1px solid var(--border);border-radius:9px;outline:none}
+.field input:focus{border-color:var(--green)}
+.full{width:100%}
+.message{padding:12px;border-radius:9px;margin:12px 0;font-size:14px;line-height:1.5;display:none}
+.success{background:#e9f7ef;color:#17613f}
+.error{background:#fff0ef;color:#a32c25}
+.auth-switch{font-size:14px;text-align:center;color:var(--muted);margin-top:18px}
+.link{color:var(--green);font-weight:700;cursor:pointer}
+.app{display:none;min-height:calc(100vh - 68px)}
+.sidebar{width:245px;background:white;border-right:1px solid var(--border);padding:22px 14px;flex-shrink:0}
+.userbox{background:var(--light);padding:15px;border-radius:12px;margin-bottom:20px;overflow-wrap:anywhere}
+.userbox strong{display:block;margin-bottom:5px}
+.navbtn{display:flex;width:100%;padding:12px 13px;margin:4px 0;border:0;background:white;border-radius:9px;text-align:left;color:#52665c;font-weight:600;gap:10px}
+.navbtn.active,.navbtn:hover{background:var(--light);color:var(--green)}
+.main{flex:1;min-width:0;padding:27px}
+.app-layout{display:flex;min-height:calc(100vh - 68px)}
+.mobile-nav{display:none}
+.page-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:22px}
+.page-head h1{font-size:25px;margin:0}
+.stat{font-size:28px;font-weight:800;color:var(--green)}
+.tag{display:inline-block;background:var(--light);color:var(--green);padding:5px 9px;border-radius:20px;font-size:11px;font-weight:700}
+.notice{background:#fff8e7;border:1px solid #f2e4bd;padding:15px;border-radius:12px;color:#70551b;font-size:13px;line-height:1.6}
+footer{text-align:center;padding:30px;color:var(--muted);font-size:13px}
+.hidden{display:none!important}
+@media(max-width:800px){
+ .grid{grid-template-columns:repeat(2,1fr)}
+ .app-layout{display:block}
+ .sidebar{display:none}
+ .mobile-nav{display:flex;overflow-x:auto;background:white;border-bottom:1px solid var(--border);padding:8px;gap:5px;position:sticky;top:68px;z-index:4}
+ .mobile-nav .navbtn{white-space:nowrap;width:auto;margin:0;padding:10px}
+ .main{padding:18px 13px}
+ .hero{padding:35px 23px}
+ .hero h1{font-size:31px}
+ .hero-icon{font-size:65px}
 }
+@media(max-width:480px){.grid{grid-template-columns:1fr}.hero-icon{display:none}.topbar{padding:0 15px}.container{padding:18px 13px}}
 </style>
 </head>
 <body>
 
-<header>
-<div class="container">
-<nav>
-<div class="logo">✚ Amar<span>Osud</span></div>
-<a href="#account" class="btn" id="navAccount">Login / Register</a>
-</nav>
-</div>
+<header class="topbar">
+ <div class="logo">💚 Amar<span>Osud</span></div>
+ <div class="top-actions" id="topActions">
+  <button class="btn outline" onclick="showAuth('login')">Login</button>
+  <button class="btn primary" onclick="showAuth('register')">Register</button>
+ </div>
+ <div class="top-actions hidden" id="loggedActions">
+  <span id="topUser" style="font-size:13px"></span>
+  <button class="btn outline" onclick="logout()">Logout</button>
+ </div>
 </header>
 
-<main>
-<section class="hero">
-<div class="container hero-grid">
-<div>
-<p><b>YOUR PERSONAL HEALTHCARE COMPANION</b></p>
-<h1>Your Health,<br><span>Our Priority.</span></h1>
-<p>আপনার স্বাস্থ্য ব্যবস্থাপনা হোক আরও সহজ। প্রয়োজনীয় স্বাস্থ্যসেবা ও ব্যক্তিগত স্বাস্থ্যতথ্য রাখুন এক জায়গায়।</p>
-<a href="#services" class="btn">Explore Services →</a>
-</div>
-<img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1000&q=85" alt="Healthcare">
-</div>
+<section id="homePage">
+ <div class="container">
+  <div class="hero">
+   <div>
+    <h1>Your Health,<br>One Platform.</h1>
+    <p>Manage your health information, find doctors, explore pharmacies and access healthcare services from one place.</p>
+    <button class="btn" onclick="showAuth('register')">Get Started →</button>
+   </div>
+   <div class="hero-icon">🩺</div>
+  </div>
+  <h2 class="section-title">Explore Our Services</h2>
+  <div class="grid" id="homeServices"></div>
+ </div>
+ <footer>© 2026 AmarOsud. Your health matters.</footer>
 </section>
 
-<section id="services">
-<div class="container">
-<div class="heading">
-<h2>Our Healthcare Services</h2>
-<p>আপনার প্রয়োজনীয় স্বাস্থ্যসেবা, একই প্ল্যাটফর্মে।</p>
-</div>
-<div class="cards">
-<div class="card"><div class="emoji">💊</div><h3>Medicine Management</h3><p>ওষুধের তালিকা ও সময় ব্যবস্থাপনা।</p></div>
-<div class="card"><div class="emoji">👨‍⚕️</div><h3>Find a Doctor</h3><p>চিকিৎসক ও কনসালটেশন সেবা খুঁজুন।</p></div>
-<div class="card"><div class="emoji">🧪</div><h3>Diagnostic Services</h3><p>ডায়াগনস্টিক সেন্টারের তথ্য খুঁজুন।</p></div>
-<div class="card"><div class="emoji">📋</div><h3>Health Records</h3><p>প্রেসক্রিপশন ও রিপোর্ট সংরক্ষণ করুন।</p></div>
-<div class="card"><div class="emoji">🏥</div><h3>Online Pharmacy</h3><p>ফার্মেসি ও ওষুধের তথ্য খুঁজুন।</p></div>
-<div class="card"><div class="emoji">🤖</div><h3>AI Health Assistant</h3><p>স্বাস্থ্যতথ্য বুঝতে সহায়তা নিন।</p></div>
-</div>
-</div>
+<section id="authPage" class="hidden">
+ <div class="auth-wrap">
+  <div class="auth-card">
+   <h2 id="authTitle">Welcome Back</h2>
+   <p style="color:var(--muted);font-size:14px">Access your AmarOsud account.</p>
+   <div id="authMessage" class="message"></div>
+   <form id="registerForm" class="hidden">
+    <div class="field"><label>Full Name</label><input id="regName" required maxlength="100" placeholder="Your full name"></div>
+    <div class="field"><label>Mobile Number</label><input id="regPhone" required placeholder="01XXXXXXXXX"></div>
+    <div class="field"><label>Email / Gmail</label><input id="regEmail" type="email" required placeholder="you@gmail.com"></div>
+    <div class="field"><label>Password (minimum 8 characters)</label><input id="regPassword" type="password" minlength="8" required placeholder="Create a password"></div>
+    <button class="btn primary full" type="submit" id="regBtn">Create Account</button>
+   </form>
+   <form id="loginForm">
+    <div class="field"><label>Email / Gmail</label><input id="loginEmail" type="email" required placeholder="you@gmail.com"></div>
+    <div class="field"><label>Password</label><input id="loginPassword" type="password" required placeholder="Your password"></div>
+    <button class="btn primary full" type="submit" id="loginBtn">Login</button>
+   </form>
+   <div class="auth-switch" id="authSwitch">Don't have an account? <span class="link" onclick="showAuth('register')">Register</span></div>
+   <div class="auth-switch"><span class="link" onclick="showHome()">← Back to Home</span></div>
+  </div>
+ </div>
 </section>
 
-<section class="auth-section" id="account">
-<div class="container">
-
-<div class="auth-box" id="registerBox">
-<h2>Create Your Account</h2>
-<div class="message error" id="regError"></div>
-<div class="message success" id="regSuccess"></div>
-
-<form id="registerForm">
-<label>Full Name</label>
-<input id="fullName" type="text" placeholder="Enter your full name" required>
-
-<label>Mobile Number</label>
-<input id="phone" type="tel" placeholder="01XXXXXXXXX" required>
-
-<label>Gmail / Email Address</label>
-<input id="regEmail" type="email" placeholder="Enter your email" required>
-
-<label>Password</label>
-<input id="regPassword" type="password" minlength="6" placeholder="At least 6 characters" required>
-
-<button type="submit" id="registerBtn">Create Account</button>
-</form>
-<div class="switch">Already have an account? <a id="showLogin">Login</a></div>
-<p class="small">By registering, you agree to use AmarOsud responsibly. Use a valid email address and a strong password.</p>
-</div>
-
-<div class="auth-box" id="loginBox" style="display:none">
-<h2>Welcome Back</h2>
-<div class="message error" id="loginError"></div>
-<div class="message success" id="loginSuccess"></div>
-
-<form id="loginForm">
-<label>Email Address</label>
-<input id="loginEmail" type="email" placeholder="Enter your email" required>
-
-<label>Password</label>
-<input id="loginPassword" type="password" placeholder="Enter your password" required>
-
-<button type="submit" id="loginBtn">Login</button>
-</form>
-<div class="switch">New to AmarOsud? <a id="showRegister">Create Account</a></div>
-</div>
-
-<div class="dashboard" id="dashboard" style="display:none">
-<h2>Welcome to AmarOsud! 💚</h2>
-<p>Your personal dashboard</p>
-<div class="profile-item"><b>Full Name:</b> <span id="profileName">-</span></div>
-<div class="profile-item"><b>Email:</b> <span id="profileEmail">-</span></div>
-<div class="profile-item"><b>Mobile:</b> <span id="profilePhone">-</span></div>
-<p style="margin:18px 0">Your healthcare journey starts here.</p>
-<button id="logoutBtn">Logout</button>
-</div>
-
-</div>
+<section id="appPage" class="app">
+ <div class="app-layout">
+  <aside class="sidebar">
+   <div class="userbox"><strong id="sideName">Welcome</strong><small id="sideEmail"></small></div>
+   <div id="sideNav"></div>
+  </aside>
+  <div style="flex:1;min-width:0">
+   <div class="mobile-nav" id="mobileNav"></div>
+   <main class="main" id="mainContent"></main>
+  </div>
+ </div>
 </section>
-</main>
-
-<footer>
-<h3>AmarOsud</h3>
-<p>Your Health, Our Priority.</p>
-<p>© 2026 AmarOsud. All rights reserved.</p>
-</footer>
 
 <script>
 const SUPABASE_URL = "https://yzeaqfcjjmebueqedlqe.supabase.co";
 const SUPABASE_KEY = "sb_publishable_pvE3TqbjzyYLeM49arRu2Q_IQ5e-Mf0";
+const client = window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 
-const client = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
-);
+const services = [
+ ["💊","Medicine Reminder","Keep track of your medicine schedule.","reminders"],
+ ["📋","Health Records","Your prescriptions and medical reports.","records"],
+ ["👨‍⚕️","Find Doctors","Explore doctors and appointment services.","doctors"],
+ ["🏥","Find Pharmacy","Explore pharmacy and medicine services.","pharmacy"],
+ ["🧪","Diagnostics","Explore diagnostic tests and centers.","diagnostics"],
+ ["👤","My Profile","Manage your personal account information.","profile"]
+];
 
-const $ = id => document.getElementById(id);
+const navItems = [
+ ["🏠","Dashboard","dashboard"],
+ ["👤","My Profile","profile"],
+ ["💊","Medicine Reminder","reminders"],
+ ["📚","Medicine History","history"],
+ ["📋","Health Records","records"],
+ ["👨‍⚕️","Find Doctors","doctors"],
+ ["🏥","Pharmacy","pharmacy"],
+ ["🧪","Diagnostics","diagnostics"],
+ ["⚙️","Settings","settings"]
+];
 
-function showMessage(id, message) {
-  const el = $(id);
-  el.textContent = message;
-  el.style.display = "block";
+let currentUser = null;
+let currentProfile = null;
+
+function el(id){return document.getElementById(id)}
+function showMessage(id,msg,type="success"){
+ const box=el(id);box.textContent=msg;box.className="message "+type;box.style.display="block";
 }
+function hideMessage(id){el(id).style.display="none"}
 
-function clearMessages() {
-  ["regError","regSuccess","loginError","loginSuccess"].forEach(id => {
-    $(id).style.display = "none";
+function showHome(){
+ ["homePage"].forEach(x=>el(x).classList.remove("hidden"));
+ el("authPage").classList.add("hidden");
+ el("appPage").style.display="none";
+ el("topActions").classList.toggle("hidden",!!currentUser);
+ el("loggedActions").classList.toggle("hidden",!currentUser);
+}
+function showAuth(mode){
+ el("homePage").classList.add("hidden");
+ el("appPage").style.display="none";
+ el("authPage").classList.remove("hidden");
+ hideMessage("authMessage");
+ const register=mode==="register";
+ el("registerForm").classList.toggle("hidden",!register);
+ el("loginForm").classList.toggle("hidden",register);
+ el("authTitle").textContent=register?"Create Your Account":"Welcome Back";
+ el("authSwitch").innerHTML=register?
+ 'Already have an account? <span class="link" onclick="showAuth(\\'login\\')">Login</span>':
+ 'Don\\'t have an account? <span class="link" onclick="showAuth(\\'register\\')">Register</span>';
+}
+function normalizePhone(value){
+ let p=value.replace(/[^0-9+]/g,"");
+ if(p.startsWith("+880"))return p;
+ if(p.startsWith("880"))return "+"+p;
+ if(p.startsWith("0"))return "+88"+p;
+ return p;
+}
+function renderServices(){
+ el("homeServices").innerHTML=services.map(s=>`
+ <div class="card"><div class="service-icon">${s[0]}</div><h3>${s[1]}</h3><p>${s[2]}</p></div>`).join("");
+}
+function renderNav(){
+ const html=navItems.map(n=>`<button class="navbtn" data-page="${n[2]}" onclick="openPage('${n[2]}')">${n[0]} ${n[1]}</button>`).join("");
+ el("sideNav").innerHTML=html;
+ el("mobileNav").innerHTML=html;
+}
+async function ensureProfile(user){
+ let {data,error}=await client.from("profiles").select("*").eq("id",user.id).maybeSingle();
+ if(error)throw error;
+ if(data)return data;
+
+ const meta=user.user_metadata||{};
+ const fullName=meta.full_name||user.email?.split("@")[0]||"AmarOsud User";
+ const phone=meta.phone||"";
+ const {data:created,error:createError}=await client.from("profiles")
+  .insert({id:user.id,phone:phone,full_name:fullName})
+  .select().single();
+
+ if(createError){
+  // Profile may not exist yet. Continue with Auth account details.
+  console.warn("Profile creation:",createError.message);
+  return {id:user.id,phone:phone,full_name:fullName};
+ }
+ return created;
+}
+async function enterApp(user){
+ currentUser=user;
+ try{
+  currentProfile=await ensureProfile(user);
+ }catch(err){
+  currentProfile={id:user.id,full_name:user.user_metadata?.full_name||"User",phone:user.user_metadata?.phone||""};
+  console.warn(err);
+ }
+ el("homePage").classList.add("hidden");
+ el("authPage").classList.add("hidden");
+ el("appPage").style.display="block";
+ el("topActions").classList.add("hidden");
+ el("loggedActions").classList.remove("hidden");
+ const name=currentProfile?.full_name||user.email;
+ el("topUser").textContent=name;
+ el("sideName").textContent=name;
+ el("sideEmail").textContent=user.email||"";
+ renderNav();
+ openPage("dashboard");
+}
+function openPage(page){
+ if(!currentUser){showAuth("login");return}
+ document.querySelectorAll(".navbtn").forEach(b=>b.classList.toggle("active",b.dataset.page===page));
+ const name=currentProfile?.full_name||"User";
+ let html="";
+ if(page==="dashboard"){
+  html=`<div class="page-head"><h1>Welcome, ${escapeHTML(name)} 👋</h1><span class="tag">My Dashboard</span></div>
+  <p style="color:var(--muted)">Your personal healthcare space.</p>
+  <div class="grid">
+   <div class="card"><div class="service-icon">💊</div><h3>Medicine Reminder</h3><p>Manage your medicine schedule.</p><button class="btn secondary" onclick="openPage('reminders')">Open</button></div>
+   <div class="card"><div class="service-icon">📋</div><h3>Health Records</h3><p>Keep your health documents organised.</p><button class="btn secondary" onclick="openPage('records')">Open</button></div>
+   <div class="card"><div class="service-icon">👨‍⚕️</div><h3>Find Doctors</h3><p>Explore doctor services.</p><button class="btn secondary" onclick="openPage('doctors')">Explore</button></div>
+   <div class="card"><div class="service-icon">🏥</div><h3>Pharmacy</h3><p>Explore pharmacy services.</p><button class="btn secondary" onclick="openPage('pharmacy')">Explore</button></div>
+   <div class="card"><div class="service-icon">🧪</div><h3>Diagnostics</h3><p>Explore diagnostic services.</p><button class="btn secondary" onclick="openPage('diagnostics')">Explore</button></div>
+   <div class="card"><div class="service-icon">👤</div><h3>My Profile</h3><p>View and update your profile.</p><button class="btn secondary" onclick="openPage('profile')">Open</button></div>
+  </div>
+  <div class="notice" style="margin-top:22px">AmarOsud is under development. Do not upload real medical reports or enter sensitive health information until the required security features are completed.</div>`;
+ }else if(page==="profile"){
+  html=`<div class="page-head"><h1>My Profile</h1></div>
+  <div class="card" style="max-width:600px">
+   <div class="field"><label>Full Name</label><input id="profileName" value="${escapeAttr(currentProfile?.full_name||"")}"></div>
+   <div class="field"><label>Mobile Number</label><input id="profilePhone" value="${escapeAttr(currentProfile?.phone||"")}"></div>
+   <div class="field"><label>Email</label><input value="${escapeAttr(currentUser.email||"")}" disabled></div>
+   <button class="btn primary" onclick="saveProfile()">Save Changes</button>
+   <div id="profileMessage" class="message"></div>
+  </div>`;
+ }else if(page==="settings"){
+  html=`<div class="page-head"><h1>Settings</h1></div><div class="card"><h3>Account</h3><p>${escapeHTML(currentUser.email||"")}</p><button class="btn outline" onclick="logout()">Logout</button></div>`;
+ }else{
+  const item=navItems.find(n=>n[2]===page);
+  const title=item?item[1]:"Service";
+  const details={
+   reminders:["💊","Medicine Reminder","Your medicine schedule feature will be connected after its secure database and reminder system are configured."],
+   history:["📚","Medicine History","Your taken, skipped and missed medicine history will appear here after the reminder module is connected."],
+   records:["📋","Health Records","Prescription storage, test report uploads and report history will be added after secure private file storage is configured."],
+   doctors:["👨‍⚕️","Find Doctors","Verified doctor profiles, specialty search and appointment booking will be connected in a future release."],
+   pharmacy:["🏥","Pharmacy Marketplace","Pharmacy registration, medicine search, stock, pricing and ordering will be developed in the next stage."],
+   diagnostics:["🧪","Diagnostic Services","Diagnostic center profiles, test information, booking and report delivery will be developed in the next stage."]
+  };
+  const d=details[page]||["💚",title,"This section is being prepared."];
+  html=`<div class="page-head"><h1>${d[0]} ${d[1]}</h1><span class="tag">Coming soon</span></div>
+  <div class="card" style="max-width:700px">
+   <h3>${d[1]}</h3><p>${d[2]}</p>
+   <div class="notice">This section is not active yet. We will enable it after setting up the required database, access rules and testing.</div>
+   <button class="btn secondary" style="margin-top:17px" onclick="openPage('dashboard')">← Back to Dashboard</button>
+  </div>`;
+ }
+ el("mainContent").innerHTML=html;
+}
+function escapeHTML(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function escapeAttr(s){return escapeHTML(s)}
+async function saveProfile(){
+ const full_name=el("profileName").value.trim();
+ const phone=normalizePhone(el("profilePhone").value.trim());
+ if(!full_name||!phone){showMessage("profileMessage","Please enter your name and mobile number.","error");return}
+ const {data,error}=await client.from("profiles").update({full_name,phone}).eq("id",currentUser.id).select().single();
+ if(error){showMessage("profileMessage",error.message,"error");return}
+ currentProfile=data;
+ el("sideName").textContent=full_name;
+ el("topUser").textContent=full_name;
+ showMessage("profileMessage","Profile updated successfully.");
+}
+async function logout(){
+ await client.auth.signOut();
+ currentUser=null;currentProfile=null;
+ el("appPage").style.display="none";
+ el("loggedActions").classList.add("hidden");
+ el("topActions").classList.remove("hidden");
+ showHome();
+}
+el("registerForm").addEventListener("submit",async e=>{
+ e.preventDefault();hideMessage("authMessage");
+ const btn=el("regBtn");btn.disabled=true;btn.textContent="Creating account...";
+ const full_name=el("regName").value.trim();
+ const phone=normalizePhone(el("regPhone").value.trim());
+ const email=el("regEmail").value.trim().toLowerCase();
+ const password=el("regPassword").value;
+ try{
+  const {data,error}=await client.auth.signUp({
+   email,password,
+   options:{data:{full_name,phone}}
   });
-}
-
-function showLogin() {
-  clearMessages();
-  $("registerBox").style.display = "none";
-  $("loginBox").style.display = "block";
-  $("dashboard").style.display = "none";
-}
-
-function showRegister() {
-  clearMessages();
-  $("registerBox").style.display = "block";
-  $("loginBox").style.display = "none";
-  $("dashboard").style.display = "none";
-}
-
-$("showLogin").onclick = showLogin;
-$("showRegister").onclick = showRegister;
-$("navAccount").onclick = () => {
-  document.getElementById("account").scrollIntoView();
-};
-
-function normalizePhone(value) {
-  let p = value.replace(/[\s-]/g, "");
-  if (/^01[3-9]\d{8}$/.test(p)) return "+88" + p;
-  if (/^8801[3-9]\d{8}$/.test(p)) return "+" + p;
-  return p;
-}
-
-$("registerForm").addEventListener("submit", async event => {
-  event.preventDefault();
-  clearMessages();
-
-  const fullName = $("fullName").value.trim();
-  const phone = normalizePhone($("phone").value);
-  const email = $("regEmail").value.trim().toLowerCase();
-  const password = $("regPassword").value;
-
-  if (!/^\+8801[3-9]\d{8}$/.test(phone)) {
-    showMessage("regError","বাংলাদেশের সঠিক মোবাইল নম্বর দিন। যেমন: 017XXXXXXXX");
-    return;
+  if(error)throw error;
+  if(data.session&&data.user){
+   try{
+    const {error:profileError}=await client.from("profiles").insert({id:data.user.id,phone,full_name});
+    if(profileError&&profileError.code!=="23505")console.warn(profileError.message);
+   }catch(err){console.warn(err)}
+   await enterApp(data.user);
+  }else{
+   showMessage("authMessage","Account created. Email confirmation is required before login. Please check your inbox.","success");
+   showAuth("login");
+   showMessage("authMessage","Account created. Please log in with your email and password.","success");
   }
-
-  $("registerBtn").disabled = true;
-  $("registerBtn").textContent = "Creating account...";
-
-  try {
-    const {data, error} = await client.auth.signUp({
-      email,
-      password
-    });
-
-    if (error) throw error;
-    if (!data.user) throw new Error("Account could not be created.");
-
-    if (!data.session) {
-      showMessage("regSuccess","Account তৈরি হয়েছে। এখন Login করুন।");
-      showLogin();
-      showMessage("loginSuccess","আপনার Account তৈরি হয়েছে। Login করুন।");
-      return;
-    }
-
-    const {error: profileError} = await client
-      .from("profiles")
-      .insert({
-        id: data.user.id,
-        phone: phone,
-        full_name: fullName
-      });
-
-    if (profileError) throw profileError;
-
-    showMessage("regSuccess","Account সফলভাবে তৈরি হয়েছে!");
-    await loadDashboard(data.user);
-  } catch (error) {
-    showMessage("regError",error.message);
-  } finally {
-    $("registerBtn").disabled = false;
-    $("registerBtn").textContent = "Create Account";
-  }
+ }catch(err){showMessage("authMessage",err.message||"Registration failed.","error")}
+ finally{btn.disabled=false;btn.textContent="Create Account"}
+});
+el("loginForm").addEventListener("submit",async e=>{
+ e.preventDefault();hideMessage("authMessage");
+ const btn=el("loginBtn");btn.disabled=true;btn.textContent="Logging in...";
+ try{
+  const email=el("loginEmail").value.trim().toLowerCase();
+  const password=el("loginPassword").value;
+  const {data,error}=await client.auth.signInWithPassword({email,password});
+  if(error)throw error;
+  if(!data.user)throw new Error("Login could not be completed.");
+  await enterApp(data.user);
+ }catch(err){showMessage("authMessage",err.message||"Login failed.","error")}
+ finally{btn.disabled=false;btn.textContent="Login"}
 });
 
-$("loginForm").addEventListener("submit", async event => {
-  event.preventDefault();
-  clearMessages();
-
-  $("loginBtn").disabled = true;
-  $("loginBtn").textContent = "Logging in...";
-
-  try {
-    const {data,error} = await client.auth.signInWithPassword({
-      email: $("loginEmail").value.trim().toLowerCase(),
-      password: $("loginPassword").value
-    });
-
-    if (error) throw error;
-    await loadDashboard(data.user);
-  } catch (error) {
-    showMessage("loginError",error.message);
-  } finally {
-    $("loginBtn").disabled = false;
-    $("loginBtn").textContent = "Login";
-  }
+async function init(){
+ renderServices();
+ const {data:{session}}=await client.auth.getSession();
+ if(session?.user)await enterApp(session.user);
+}
+client.auth.onAuthStateChange((event,session)=>{
+ if(event==="SIGNED_OUT"){currentUser=null;currentProfile=null;showHome()}
 });
-
-async function loadDashboard(user) {
-  const {data,error} = await client
-    .from("profiles")
-    .select("full_name,phone")
-    .eq("id",user.id)
-    .maybeSingle();
-
-  if (error) {
-    showMessage("loginError","Profile load failed: " + error.message);
-    return;
-  }
-
-  if (!data) {
-    showMessage("loginError","Profile পাওয়া যায়নি। Support প্রয়োজন হতে পারে।");
-    return;
-  }
-
-  $("profileName").textContent = data.full_name || "-";
-  $("profileEmail").textContent = user.email || "-";
-  $("profilePhone").textContent = data.phone || "-";
-
-  $("registerBox").style.display = "none";
-  $("loginBox").style.display = "none";
-  $("dashboard").style.display = "block";
-}
-
-$("logoutBtn").onclick = async () => {
-  const {error} = await client.auth.signOut();
-  if (error) {
-    alert(error.message);
-    return;
-  }
-  showLogin();
-};
-
-async function checkSession() {
-  const {data} = await client.auth.getSession();
-  if (data.session) {
-    await loadDashboard(data.session.user);
-  }
-}
-
-checkSession();
+init();
 </script>
 </body>
 </html>
