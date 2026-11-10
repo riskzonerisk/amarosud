@@ -2,127 +2,374 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#087f6e">
-  <title>AmarOsud | আপনার স্বাস্থ্য, আপনার হাতে</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: Arial, sans-serif;
-      background: #f5faf8;
-      color: #173b35;
-      line-height: 1.6;
-    }
-    header {
-      background: white;
-      padding: 16px 6%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 2px 12px #0000000c;
-    }
-    .logo { font-size: 25px; font-weight: bold; color: #087f6e; }
-    .hero {
-      text-align: center;
-      padding: 65px 20px;
-      background: linear-gradient(135deg, #e1f6ef, #f4fbf8);
-    }
-    .hero h1 { font-size: 34px; margin-bottom: 15px; }
-    .hero p { color: #55716b; max-width: 550px; margin: auto; }
-    .services {
-      max-width: 950px;
-      margin: 35px auto;
-      padding: 0 18px;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
-      gap: 16px;
-    }
-    .service {
-      background: white;
-      padding: 25px 12px;
-      border-radius: 15px;
-      text-align: center;
-      box-shadow: 0 3px 15px #0000000a;
-    }
-    .service span { font-size: 32px; }
-    .service h3 { font-size: 16px; margin-top: 10px; }
-    .info { text-align: center; padding: 25px 20px 45px; }
-    footer {
-      text-align: center;
-      background: #087f6e;
-      color: white;
-      padding: 20px;
-    }
-    button {
-      background: #087f6e;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      padding: 12px 22px;
-      margin-top: 22px;
-      font-size: 16px;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AmarOsud | Your Health, Our Priority</title>
+<meta name="description" content="AmarOsud - Your personal healthcare companion. Manage medicines, find doctors and healthcare services.">
+
+<style>
+:root {
+  --green: #087f5b;
+  --dark: #075c45;
+  --light: #e9f7f1;
+  --text: #18352d;
+  --muted: #6b8179;
+  --white: #ffffff;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body {
+  font-family: Arial, "Noto Sans Bengali", sans-serif;
+  color:var(--text);
+  background:#f8fbf9;
+  line-height:1.6;
+}
+a { text-decoration:none; color:inherit; }
+.container { width:90%; max-width:1150px; margin:auto; }
+
+/* Navigation */
+header {
+  background:rgba(255,255,255,.96);
+  position:sticky; top:0; z-index:100;
+  box-shadow:0 2px 15px rgba(0,0,0,.04);
+}
+nav {
+  min-height:76px; display:flex;
+  justify-content:space-between; align-items:center;
+}
+.logo { display:flex; align-items:center; gap:9px; }
+.logo svg { width:42px; height:42px; }
+.logo strong { font-size:24px; color:var(--dark); }
+.logo span { color:var(--green); }
+.nav-links { display:flex; align-items:center; gap:27px; }
+.nav-links a { font-size:14px; font-weight:600; }
+.nav-links a:hover { color:var(--green); }
+.btn {
+  display:inline-block; background:var(--green);
+  color:white; padding:12px 23px;
+  border-radius:9px; font-weight:700;
+  transition:.25s; border:0; cursor:pointer;
+}
+.btn:hover { background:var(--dark); transform:translateY(-2px); }
+.menu-btn {
+  display:none; border:0; background:none;
+  font-size:27px; color:var(--dark);
+}
+
+/* Hero */
+.hero { padding:75px 0 85px; background:linear-gradient(120deg,#effaf4,#f8fbf9); }
+.hero-grid {
+  display:grid; grid-template-columns:1fr 1fr;
+  align-items:center; gap:50px;
+}
+.tag {
+  display:inline-block; background:#d9f3e7;
+  color:var(--dark); padding:7px 14px;
+  border-radius:30px; font-size:13px; font-weight:700;
+  margin-bottom:20px;
+}
+.hero h1 { font-size:clamp(36px,5vw,57px); line-height:1.18; margin-bottom:20px; }
+.hero h1 span { color:var(--green); }
+.hero p { color:var(--muted); font-size:17px; margin-bottom:28px; max-width:510px; }
+.hero-image {
+  position:relative; border-radius:25px; overflow:hidden;
+  box-shadow:0 20px 50px rgba(8,80,55,.13);
+}
+.hero-image img { width:100%; height:390px; object-fit:cover; display:block; }
+.image-note {
+  position:absolute; bottom:18px; left:18px;
+  background:white; padding:13px 17px;
+  border-radius:12px; font-size:14px; font-weight:700;
+  box-shadow:0 5px 20px #0001;
+}
+
+/* Trust strip */
+.trust { padding:25px 0; background:white; }
+.trust-grid {
+  display:grid; grid-template-columns:repeat(3,1fr);
+  text-align:center; gap:20px;
+}
+.trust-item strong { display:block; color:var(--green); font-size:18px; }
+.trust-item small { color:var(--muted); }
+
+/* Sections */
+section.content-section { padding:75px 0; }
+.section-heading { text-align:center; margin-bottom:42px; }
+.section-heading h2 { font-size:34px; margin-bottom:10px; }
+.section-heading p { color:var(--muted); }
+.services {
+  display:grid; grid-template-columns:repeat(3,1fr); gap:22px;
+}
+.service-card {
+  background:white; padding:28px 24px;
+  border-radius:17px; border:1px solid #e8f0eb;
+  transition:.25s;
+}
+.service-card:hover {
+  transform:translateY(-6px);
+  box-shadow:0 15px 35px rgba(0,80,50,.08);
+}
+.service-icon {
+  width:55px; height:55px; border-radius:14px;
+  display:grid; place-items:center;
+  background:var(--light); font-size:27px;
+  margin-bottom:18px;
+}
+.service-card h3 { margin-bottom:9px; font-size:19px; }
+.service-card p { color:var(--muted); font-size:14px; margin-bottom:17px; }
+.learn { color:var(--green); font-size:14px; font-weight:700; }
+
+/* About */
+.about-grid {
+  display:grid; grid-template-columns:1fr 1fr;
+  align-items:center; gap:45px;
+}
+.about-image img {
+  width:100%; height:340px; object-fit:cover;
+  border-radius:20px;
+}
+.about-text h2 { font-size:32px; margin-bottom:15px; }
+.about-text p { color:var(--muted); margin-bottom:18px; }
+.feature { margin:12px 0; font-weight:600; }
+.feature span { color:var(--green); margin-right:8px; }
+
+/* CTA */
+.cta {
+  background:linear-gradient(120deg,#087f5b,#07543f);
+  color:white; padding:48px 25px;
+  border-radius:22px; text-align:center;
+}
+.cta h2 { font-size:30px; margin-bottom:10px; }
+.cta p { opacity:.88; margin-bottom:22px; }
+.cta .btn { background:white; color:var(--dark); }
+
+/* Footer */
+footer { background:#102e25; color:white; padding:48px 0 20px; }
+.footer-grid {
+  display:grid; grid-template-columns:2fr 1fr 1fr;
+  gap:35px; margin-bottom:35px;
+}
+footer p, footer a { color:#c2d4cc; font-size:14px; }
+footer h3 { margin-bottom:13px; }
+footer a { display:block; margin:8px 0; }
+.copyright {
+  border-top:1px solid #ffffff22;
+  padding-top:18px; text-align:center;
+  color:#c2d4cc; font-size:13px;
+}
+
+/* Mobile */
+@media(max-width:800px) {
+  .menu-btn { display:block; }
+  .nav-links {
+    display:none; position:absolute; top:76px;
+    left:0; width:100%; background:white;
+    padding:22px 5%; flex-direction:column;
+    align-items:flex-start; gap:18px;
+    box-shadow:0 10px 20px #0001;
+  }
+  .nav-links.show { display:flex; }
+  .hero { padding:48px 0; }
+  .hero-grid, .about-grid { grid-template-columns:1fr; }
+  .hero-image img { height:280px; }
+  .services { grid-template-columns:1fr; }
+  .trust-grid { grid-template-columns:1fr; gap:18px; }
+  .footer-grid { grid-template-columns:1fr; }
+  section.content-section { padding:55px 0; }
+  .section-heading h2 { font-size:28px; }
+}
+</style>
 </head>
+
 <body>
-  <header>
-    <div class="logo">💚 AmarOsud</div>
-    <div>বাংলা | English</div>
-  </header>
 
-  <section class="hero">
-    <h1>আপনার স্বাস্থ্য, আপনার হাতে</h1>
-    <p>
-      Manage your health, medicines, prescriptions and
-      healthcare services in one place.
-      আপনার স্বাস্থ্য ব্যবস্থাপনা এখন আরও সহজ।
-    </p>
-    <button onclick="alert('Registration system coming soon!')">
-      Get Started
-    </button>
-  </section>
+<header>
+  <div class="container">
+    <nav>
+      <a href="#" class="logo">
+        <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="5" y="5" width="90" height="90" rx="25" fill="#087F5B"/>
+          <path d="M50 23V77M23 50H77" stroke="white" stroke-width="13" stroke-linecap="round"/>
+          <path d="M68 20C80 20 86 29 84 40C73 43 63 39 61 30C60 26 63 22 68 20Z" fill="#B7F0D4"/>
+        </svg>
+        <strong>Amar<span>Osud</span></strong>
+      </a>
 
-  <section class="services">
-    <div class="service">
-      <span>💊</span>
-      <h3>Medicine Management</h3>
-      <p>ওষুধ ব্যবস্থাপনা</p>
-    </div>
-    <div class="service">
-      <span>⏰</span>
-      <h3>Medicine Reminder</h3>
-      <p>ওষুধের সময়সূচি</p>
-    </div>
-    <div class="service">
-      <span>📋</span>
-      <h3>Medical Records</h3>
-      <p>মেডিকেল রিপোর্ট</p>
-    </div>
-    <div class="service">
-      <span>👨‍⚕️</span>
-      <h3>Find a Doctor</h3>
-      <p>ডাক্তার খুঁজুন</p>
-    </div>
-    <div class="service">
-      <span>🧪</span>
-      <h3>Diagnostic Tests</h3>
-      <p>ডায়াগনস্টিক সেবা</p>
-    </div>
-    <div class="service">
-      <span>🏥</span>
-      <h3>Find Pharmacy</h3>
-      <p>ফার্মেসি খুঁজুন</p>
-    </div>
-  </section>
+      <button class="menu-btn" onclick="toggleMenu()" aria-label="Open menu">☰</button>
 
-  <section class="info">
-    <h2>আমরা আপনার পাশে</h2>
-    <p>One platform for better healthcare management.</p>
-  </section>
+      <div class="nav-links" id="navLinks">
+        <a href="#home" onclick="closeMenu()">Home</a>
+        <a href="#services" onclick="closeMenu()">Services</a>
+        <a href="#about" onclick="closeMenu()">About Us</a>
+        <a href="#contact" onclick="closeMenu()">Contact</a>
+        <a href="#account" class="btn" onclick="closeMenu()">Login / Register</a>
+      </div>
+    </nav>
+  </div>
+</header>
 
-  <footer>
-    <p>© 2026 AmarOsud. All rights reserved.</p>
-  </footer>
+<main>
+<section class="hero" id="home">
+  <div class="container hero-grid">
+    <div>
+      <span class="tag">YOUR PERSONAL HEALTHCARE COMPANION</span>
+      <h1>Your Health,<br><span>Our Priority.</span></h1>
+      <p>
+        আপনার স্বাস্থ্য ব্যবস্থাপনা হোক আরও সহজ।
+        ওষুধের সময় মনে রাখা থেকে শুরু করে ডাক্তার ও
+        ডায়াগনস্টিক সেবা খুঁজে পাওয়া—সব এক জায়গায়।
+      </p>
+      <a href="#services" class="btn">Explore Services →</a>
+    </div>
+
+    <div class="hero-image">
+      <img
+        src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1000&q=85"
+        alt="Healthcare professional providing medical care">
+      <div class="image-note">💚 Healthcare Made Easier</div>
+    </div>
+  </div>
+</section>
+
+<div class="trust">
+  <div class="container trust-grid">
+    <div class="trust-item">
+      <strong>Personal Health</strong>
+      <small>Manage your health records</small>
+    </div>
+    <div class="trust-item">
+      <strong>Easy Access</strong>
+      <small>Explore healthcare services</small>
+    </div>
+    <div class="trust-item">
+      <strong>One Platform</strong>
+      <small>Your healthcare companion</small>
+    </div>
+  </div>
+</div>
+
+<section class="content-section" id="services">
+  <div class="container">
+    <div class="section-heading">
+      <h2>Our Healthcare Services</h2>
+      <p>আপনার প্রয়োজনীয় স্বাস্থ্যসেবা, একই প্ল্যাটফর্মে।</p>
+    </div>
+
+    <div class="services">
+      <div class="service-card">
+        <div class="service-icon">💊</div>
+        <h3>Medicine Management</h3>
+        <p>ওষুধের তালিকা, ডোজ এবং নিয়মিত ওষুধ গ্রহণের হিসাব রাখুন।</p>
+        <a href="#account" class="learn">Explore Service →</a>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">👨‍⚕️</div>
+        <h3>Find a Doctor</h3>
+        <p>আপনার প্রয়োজন অনুযায়ী চিকিৎসক ও কনসালটেশন সেবা খুঁজুন।</p>
+        <a href="#account" class="learn">Explore Service →</a>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">🧪</div>
+        <h3>Diagnostic Services</h3>
+        <p>ডায়াগনস্টিক সেন্টার ও বিভিন্ন পরীক্ষার তথ্য খুঁজুন।</p>
+        <a href="#account" class="learn">Explore Service →</a>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">📋</div>
+        <h3>Health Records</h3>
+        <p>প্রেসক্রিপশন ও মেডিকেল রিপোর্ট এক জায়গায় সংরক্ষণ করুন।</p>
+        <a href="#account" class="learn">Explore Service →</a>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">🏥</div>
+        <h3>Online Pharmacy</h3>
+        <p>ফার্মেসি ও ওষুধের প্রাপ্যতা সম্পর্কে তথ্য খুঁজুন।</p>
+        <a href="#account" class="learn">Explore Service →</a>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">🤖</div>
+        <h3>AI Health Assistant</h3>
+        <p>স্বাস্থ্যসংক্রান্ত তথ্য বুঝতে এবং উপযুক্ত বিশেষজ্ঞের বিভাগ খুঁজতে সহায়তা।</p>
+        <a href="#account" class="learn">Explore Service →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="content-section" id="about" style="background:white;">
+  <div class="container about-grid">
+    <div class="about-image">
+      <img
+        src="https://images.unsplash.com/photo-1584982751601-97dcc096659c?auto=format&fit=crop&w=1000&q=85"
+        alt="Medical professional working with healthcare records">
+    </div>
+    <div class="about-text">
+      <span class="tag">ABOUT AMAROSUD</span>
+      <h2>Healthcare, Simplified.</h2>
+      <p>
+        AmarOsud-এর লক্ষ্য হলো ব্যক্তিগত স্বাস্থ্য ব্যবস্থাপনা
+        এবং প্রয়োজনীয় স্বাস্থ্যসেবার তথ্য সহজে মানুষের কাছে পৌঁছে দেওয়া।
+      </p>
+      <div class="feature"><span>✓</span> Personal health management</div>
+      <div class="feature"><span>✓</span> Healthcare service discovery</div>
+      <div class="feature"><span>✓</span> A convenient digital experience</div>
+    </div>
+  </div>
+</section>
+
+<section class="content-section" id="account">
+  <div class="container">
+    <div class="cta">
+      <h2>Take a Better Step for Your Health</h2>
+      <p>AmarOsud-এর সঙ্গে আপনার স্বাস্থ্য ব্যবস্থাপনাকে আরও সহজ করুন।</p>
+      <a href="#home" class="btn">Get Started →</a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer id="contact">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="logo" style="margin-bottom:15px;">
+          <strong style="color:white;">Amar<span>Osud</span></strong>
+        </div>
+        <p>Your personal healthcare companion.</p>
+        <p>স্বাস্থ্যসেবাকে আরও সহজ ও সবার নাগালে পৌঁছে দেওয়াই আমাদের লক্ষ্য।</p>
+      </div>
+      <div>
+        <h3>Quick Links</h3>
+        <a href="#home">Home</a>
+        <a href="#services">Services</a>
+        <a href="#about">About Us</a>
+      </div>
+      <div>
+        <h3>Our Services</h3>
+        <a href="#services">Medicine Management</a>
+        <a href="#services">Find a Doctor</a>
+        <a href="#services">Diagnostic Services</a>
+      </div>
+    </div>
+    <div class="copyright">
+      © 2026 AmarOsud. All rights reserved.
+    </div>
+  </div>
+</footer>
+
+<script>
+function toggleMenu() {
+  document.getElementById("navLinks").classList.toggle("show");
+}
+function closeMenu() {
+  document.getElementById("navLinks").classList.remove("show");
+}
+</script>
+
 </body>
 </html>
