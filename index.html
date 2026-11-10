@@ -3,89 +3,97 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AmarOsud | Your Health, One Platform</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#087f5b">
+<title>AmarOsud | Healthcare Platform</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-:root{--green:#087f5b;--dark:#07543e;--light:#e9f7f1;--bg:#f5f8f7;--text:#18352b;--muted:#718078;--white:#fff;--border:#e3ebe7}
+:root{--g:#087f5b;--d:#07543e;--l:#e9f7f1;--bg:#f5f8f7;--t:#18352b;--m:#718078;--b:#e3ebe7}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);font-family:Arial,sans-serif;color:var(--text)}
+body{margin:0;background:var(--bg);color:var(--t);font-family:Arial,"Noto Sans Bengali",sans-serif}
 button,input{font:inherit}
 button{cursor:pointer}
-.topbar{height:68px;background:white;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 5%;position:sticky;top:0;z-index:5}
-.logo{font-size:23px;font-weight:800;color:var(--green)}
-.logo span{color:#18352b}
-.top-actions{display:flex;gap:10px;align-items:center}
-.btn{border:0;border-radius:9px;padding:11px 17px;font-weight:700}
-.primary{background:var(--green);color:white}
-.secondary{background:var(--light);color:var(--green)}
-.outline{background:white;border:1px solid var(--border);color:var(--text)}
+.top{height:68px;background:white;border-bottom:1px solid var(--b);display:flex;align-items:center;justify-content:space-between;padding:0 5%;position:sticky;top:0;z-index:10}
+.logo{font-size:23px;font-weight:800;color:var(--g)}
+.logo span{color:var(--t)}
+.actions{display:flex;gap:8px;align-items:center}
+.btn{border:0;border-radius:9px;padding:11px 16px;font-weight:700}
+.primary{background:var(--g);color:white}
+.secondary{background:var(--l);color:var(--g)}
+.outline{background:white;border:1px solid var(--b);color:var(--t)}
+.btn:disabled{opacity:.6}
 .container{max-width:1150px;margin:auto;padding:28px 20px}
-.hero{background:linear-gradient(120deg,#07543e,#0b9870);border-radius:20px;padding:55px 35px;color:white;display:flex;align-items:center;justify-content:space-between;gap:25px;min-height:280px}
-.hero h1{font-size:40px;line-height:1.15;margin:0 0 15px}
-.hero p{max-width:570px;line-height:1.7;color:#e2f5ed}
-.hero .btn{background:white;color:var(--green);margin-top:10px}
-.hero-icon{font-size:100px}
-.section-title{margin:35px 0 17px;font-size:23px}
+.hero{background:linear-gradient(120deg,#07543e,#0b9870);border-radius:20px;padding:48px 32px;color:white;display:flex;align-items:center;justify-content:space-between;gap:20px;min-height:270px}
+.hero h1{font-size:40px;line-height:1.2;margin:0 0 15px}
+.hero p{max-width:570px;line-height:1.8;color:#e2f5ed}
+.hero .btn{background:white;color:var(--g);margin-top:10px}
+.heroIcon{font-size:90px}
+h2.section{margin:34px 0 17px}
 .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.card{background:white;border:1px solid var(--border);border-radius:15px;padding:21px;box-shadow:0 3px 12px #173b2b08}
+.card{background:white;border:1px solid var(--b);border-radius:15px;padding:20px;box-shadow:0 3px 12px #173b2b08}
 .card h3{margin:10px 0 8px}
-.card p{color:var(--muted);font-size:14px;line-height:1.6}
-.service-icon{font-size:30px}
-.auth-wrap{max-width:440px;margin:45px auto;padding:0 16px}
-.auth-card{background:white;border:1px solid var(--border);border-radius:18px;padding:27px;box-shadow:0 8px 30px #173b2b0c}
-.auth-card h2{margin-top:0}
+.card p{color:var(--m);font-size:14px;line-height:1.7}
+.icon{font-size:30px}
+.auth{max-width:450px;margin:38px auto;padding:0 15px}
+.authbox{background:white;border:1px solid var(--b);border-radius:18px;padding:26px}
 .field{margin:14px 0}
-.field label{display:block;font-size:13px;font-weight:700;margin-bottom:7px}
-.field input{width:100%;padding:13px;border:1px solid var(--border);border-radius:9px;outline:none}
-.field input:focus{border-color:var(--green)}
+.field label{display:block;font-size:13px;font-weight:bold;margin-bottom:7px}
+.field input{width:100%;padding:13px;border:1px solid var(--b);border-radius:9px;outline:none}
+.field input:focus{border-color:var(--g)}
 .full{width:100%}
-.message{padding:12px;border-radius:9px;margin:12px 0;font-size:14px;line-height:1.5;display:none}
-.success{background:#e9f7ef;color:#17613f}
-.error{background:#fff0ef;color:#a32c25}
-.auth-switch{font-size:14px;text-align:center;color:var(--muted);margin-top:18px}
-.link{color:var(--green);font-weight:700;cursor:pointer}
-.app{display:none;min-height:calc(100vh - 68px)}
-.sidebar{width:245px;background:white;border-right:1px solid var(--border);padding:22px 14px;flex-shrink:0}
-.userbox{background:var(--light);padding:15px;border-radius:12px;margin-bottom:20px;overflow-wrap:anywhere}
-.userbox strong{display:block;margin-bottom:5px}
-.navbtn{display:flex;width:100%;padding:12px 13px;margin:4px 0;border:0;background:white;border-radius:9px;text-align:left;color:#52665c;font-weight:600;gap:10px}
-.navbtn.active,.navbtn:hover{background:var(--light);color:var(--green)}
-.main{flex:1;min-width:0;padding:27px}
-.app-layout{display:flex;min-height:calc(100vh - 68px)}
-.mobile-nav{display:none}
-.page-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:22px}
-.page-head h1{font-size:25px;margin:0}
-.stat{font-size:28px;font-weight:800;color:var(--green)}
-.tag{display:inline-block;background:var(--light);color:var(--green);padding:5px 9px;border-radius:20px;font-size:11px;font-weight:700}
-.notice{background:#fff8e7;border:1px solid #f2e4bd;padding:15px;border-radius:12px;color:#70551b;font-size:13px;line-height:1.6}
-footer{text-align:center;padding:30px;color:var(--muted);font-size:13px}
+.msg{display:none;padding:12px;border-radius:9px;margin:12px 0;font-size:14px;line-height:1.6;overflow-wrap:anywhere}
+.ok{background:#e9f7ef;color:#17613f}
+.err{background:#fff0ef;color:#a32c25}
+.switch{text-align:center;color:var(--m);font-size:14px;margin-top:16px}
+.link{color:var(--g);font-weight:bold;cursor:pointer}
 .hidden{display:none!important}
+.app{display:none;min-height:calc(100vh - 68px)}
+.layout{display:flex;min-height:calc(100vh - 68px)}
+.sidebar{width:245px;background:white;border-right:1px solid var(--b);padding:20px 13px;flex-shrink:0}
+.userbox{background:var(--l);padding:14px;border-radius:12px;margin-bottom:17px;overflow-wrap:anywhere}
+.userbox strong{display:block;margin-bottom:5px}
+.navbtn{display:block;width:100%;padding:12px;margin:4px 0;border:0;background:white;border-radius:9px;text-align:left;color:#52665c;font-weight:600}
+.navbtn.active,.navbtn:hover{background:var(--l);color:var(--g)}
+.main{flex:1;min-width:0;padding:25px}
+.mobileNav{display:none}
+.head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:20px}
+.head h1{font-size:25px;margin:0}
+.tag{background:var(--l);color:var(--g);padding:5px 9px;border-radius:20px;font-size:11px;font-weight:bold}
+.notice{background:#fff8e7;border:1px solid #f2e4bd;padding:14px;border-radius:12px;color:#70551b;font-size:13px;line-height:1.7;margin:15px 0}
+.small{font-size:12px;color:var(--m);line-height:1.6}
+.item{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--b)}
+footer{text-align:center;padding:28px;color:var(--m);font-size:13px}
 @media(max-width:800px){
  .grid{grid-template-columns:repeat(2,1fr)}
- .app-layout{display:block}
+ .layout{display:block}
  .sidebar{display:none}
- .mobile-nav{display:flex;overflow-x:auto;background:white;border-bottom:1px solid var(--border);padding:8px;gap:5px;position:sticky;top:68px;z-index:4}
- .mobile-nav .navbtn{white-space:nowrap;width:auto;margin:0;padding:10px}
+ .mobileNav{display:flex;overflow-x:auto;background:white;border-bottom:1px solid var(--b);padding:7px;gap:5px;position:sticky;top:68px;z-index:4}
+ .mobileNav .navbtn{white-space:nowrap;width:auto;margin:0;padding:10px}
  .main{padding:18px 13px}
- .hero{padding:35px 23px}
+ .hero{padding:32px 22px}
  .hero h1{font-size:31px}
- .hero-icon{font-size:65px}
 }
-@media(max-width:480px){.grid{grid-template-columns:1fr}.hero-icon{display:none}.topbar{padding:0 15px}.container{padding:18px 13px}}
+@media(max-width:480px){
+ .grid{grid-template-columns:1fr}
+ .heroIcon{display:none}
+ .top{padding:0 12px}
+ .logo{font-size:20px}
+}
 </style>
 </head>
 <body>
 
-<header class="topbar">
+<header class="top">
  <div class="logo">💚 Amar<span>Osud</span></div>
- <div class="top-actions" id="topActions">
-  <button class="btn outline" onclick="showAuth('login')">Login</button>
-  <button class="btn primary" onclick="showAuth('register')">Register</button>
- </div>
- <div class="top-actions hidden" id="loggedActions">
-  <span id="topUser" style="font-size:13px"></span>
-  <button class="btn outline" onclick="logout()">Logout</button>
+ <div class="actions">
+  <button class="btn outline" id="languageBtn" onclick="toggleLanguage()">বাংলা</button>
+  <div id="topActions">
+   <button class="btn outline" onclick="showAuth('login')" data-t="login">Login</button>
+   <button class="btn primary" onclick="showAuth('register')" data-t="register">Register</button>
+  </div>
+  <div id="loggedActions" class="hidden">
+   <button class="btn outline" onclick="logout()" data-t="logout">Logout</button>
+  </div>
  </div>
 </header>
 
@@ -93,110 +101,238 @@ footer{text-align:center;padding:30px;color:var(--muted);font-size:13px}
  <div class="container">
   <div class="hero">
    <div>
-    <h1>Your Health,<br>One Platform.</h1>
-    <p>Manage your health information, find doctors, explore pharmacies and access healthcare services from one place.</p>
-    <button class="btn" onclick="showAuth('register')">Get Started →</button>
+    <h1 data-t="heroTitle">Your Health,<br>One Platform.</h1>
+    <p data-t="heroText">Manage your health information and explore healthcare services from one place.</p>
+    <button class="btn" onclick="showAuth('register')" data-t="start">Get Started →</button>
    </div>
-   <div class="hero-icon">🩺</div>
+   <div class="heroIcon">🩺</div>
   </div>
-  <h2 class="section-title">Explore Our Services</h2>
+  <h2 class="section" data-t="services">Explore Our Services</h2>
   <div class="grid" id="homeServices"></div>
  </div>
- <footer>© 2026 AmarOsud. Your health matters.</footer>
+ <footer>© 2026 AmarOsud · <span data-t="footer">Your health matters.</span></footer>
 </section>
 
 <section id="authPage" class="hidden">
- <div class="auth-wrap">
-  <div class="auth-card">
+ <div class="auth">
+  <div class="authbox">
    <h2 id="authTitle">Welcome Back</h2>
-   <p style="color:var(--muted);font-size:14px">Access your AmarOsud account.</p>
-   <div id="authMessage" class="message"></div>
+   <p class="small" data-t="authIntro">Access your AmarOsud account.</p>
+   <div id="authMessage" class="msg"></div>
+
    <form id="registerForm" class="hidden">
-    <div class="field"><label>Full Name</label><input id="regName" required maxlength="100" placeholder="Your full name"></div>
-    <div class="field"><label>Mobile Number</label><input id="regPhone" required placeholder="01XXXXXXXXX"></div>
-    <div class="field"><label>Email / Gmail</label><input id="regEmail" type="email" required placeholder="you@gmail.com"></div>
-    <div class="field"><label>Password (minimum 8 characters)</label><input id="regPassword" type="password" minlength="8" required placeholder="Create a password"></div>
-    <button class="btn primary full" type="submit" id="regBtn">Create Account</button>
+    <div class="field"><label data-t="name">Full Name</label><input id="regName" required maxlength="100" autocomplete="name"></div>
+    <div class="field"><label data-t="phone">Mobile Number</label><input id="regPhone" required maxlength="20" placeholder="01XXXXXXXXX"></div>
+    <div class="field"><label data-t="email">Email / Gmail</label><input id="regEmail" type="email" required autocomplete="email"></div>
+    <div class="field"><label data-t="password">Password (minimum 8 characters)</label><input id="regPassword" type="password" minlength="8" required autocomplete="new-password"></div>
+    <button class="btn primary full" id="regBtn" type="submit" data-t="create">Create Account</button>
    </form>
+
    <form id="loginForm">
-    <div class="field"><label>Email / Gmail</label><input id="loginEmail" type="email" required placeholder="you@gmail.com"></div>
-    <div class="field"><label>Password</label><input id="loginPassword" type="password" required placeholder="Your password"></div>
-    <button class="btn primary full" type="submit" id="loginBtn">Login</button>
+    <div class="field"><label data-t="email">Email / Gmail</label><input id="loginEmail" type="email" required autocomplete="email"></div>
+    <div class="field"><label data-t="passwordShort">Password</label><input id="loginPassword" type="password" required autocomplete="current-password"></div>
+    <button class="btn primary full" id="loginBtn" type="submit" data-t="login">Login</button>
    </form>
-   <div class="auth-switch" id="authSwitch">Don't have an account? <span class="link" onclick="showAuth('register')">Register</span></div>
-   <div class="auth-switch"><span class="link" onclick="showHome()">← Back to Home</span></div>
+
+   <div class="switch" id="authSwitch"></div>
+   <div class="switch"><span class="link" onclick="showHome()" data-t="back">← Back to Home</span></div>
   </div>
  </div>
 </section>
 
 <section id="appPage" class="app">
- <div class="app-layout">
+ <div class="layout">
   <aside class="sidebar">
    <div class="userbox"><strong id="sideName">Welcome</strong><small id="sideEmail"></small></div>
    <div id="sideNav"></div>
   </aside>
   <div style="flex:1;min-width:0">
-   <div class="mobile-nav" id="mobileNav"></div>
+   <div class="mobileNav" id="mobileNav"></div>
    <main class="main" id="mainContent"></main>
   </div>
  </div>
 </section>
 
 <script>
-const SUPABASE_URL = "https://yzeaqfcjjmebueqedlqe.supabase.co";
-const SUPABASE_KEY = "sb_publishable_pvE3TqbjzyYLeM49arRu2Q_IQ5e-Mf0";
-const client = window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+"use strict";
 
-const services = [
- ["💊","Medicine Reminder","Keep track of your medicine schedule.","reminders"],
- ["📋","Health Records","Your prescriptions and medical reports.","records"],
- ["👨‍⚕️","Find Doctors","Explore doctors and appointment services.","doctors"],
- ["🏥","Find Pharmacy","Explore pharmacy and medicine services.","pharmacy"],
- ["🧪","Diagnostics","Explore diagnostic tests and centers.","diagnostics"],
- ["👤","My Profile","Manage your personal account information.","profile"]
+/* SUPABASE SETTINGS */
+const SUPABASE_URL="https://yzeaqfcjjmebueqedlqe.supabase.co";
+const SUPABASE_KEY="sb_publishable_pvE3TqbjzyYLeM49arRu2Q_IQ5e-Mf0";
+const client=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+
+/* TRANSLATIONS */
+const translations={
+ en:{
+  login:"Login",register:"Register",logout:"Logout",
+  heroTitle:"Your Health,<br>One Platform.",
+  heroText:"Manage your health information, find doctors, explore pharmacies and access healthcare services from one place.",
+  start:"Get Started →",services:"Explore Our Services",footer:"Your health matters.",
+  authIntro:"Access your AmarOsud account.",name:"Full Name",phone:"Mobile Number",
+  email:"Email / Gmail",password:"Password (minimum 8 characters)",
+  passwordShort:"Password",create:"Create Account",back:"← Back to Home",
+  switchLogin:"Already have an account?",switchRegister:"Don't have an account?",
+  dashboard:"Dashboard",profile:"My Profile",reminders:"Medicine Reminder",
+  history:"Medicine History",records:"Health Records",doctors:"Find Doctors",
+  pharmacy:"Pharmacy",diagnostics:"Diagnostics",settings:"Settings",
+  welcome:"Welcome",welcomeText:"Your personal healthcare space.",
+  profileText:"View and manage your account information.",
+  save:"Save Changes",saved:"Profile updated successfully.",
+  nameRequired:"Please enter your name and mobile number.",
+  phoneInvalid:"Please enter a valid Bangladesh mobile number.",
+  reminderInfo:"Create and manage your medicine schedule. Reminders are stored only in this browser. They do not provide guaranteed alarms or notifications.",
+  reminderTitle:"Your Medicine Reminders",medicineName:"Medicine name",
+  medicineTime:"Time",addReminder:"Add Reminder",noReminder:"No reminders added yet.",
+  delete:"Delete",reminderSaved:"Reminder saved on this device.",
+  reminderRequired:"Please enter a medicine name and time.",
+  historyInfo:"Medicine-taking history will be added with the secure reminder database.",
+  recordsInfo:"Prescription and report storage requires private cloud storage and additional security.",
+  doctorsInfo:"Verified doctor profiles and appointment booking will be added after provider registration and database setup.",
+  pharmacyInfo:"Pharmacy registration, medicine search, stock, pricing and ordering will be added in a later release.",
+  diagnosticsInfo:"Diagnostic centres, test catalogues and bookings will be added in a later release.",
+  settingsInfo:"Manage your account and sign out.",
+  coming:"Coming soon",backDashboard:"← Back to Dashboard",
+  dashboardNote:"AmarOsud is under development. Do not enter real medical information or upload real reports yet.",
+  registerSuccess:"Account created. Opening your dashboard...",
+  emailConfirm:"Account created. Please confirm your email before logging in.",
+  loginFailed:"Login failed.",registerFailed:"Registration failed.",
+  profileError:"Could not save profile: ",reminder:"Manage your medicine schedule.",
+  health:"Keep your prescriptions and reports organised.",
+  doctor:"Explore doctor and appointment services.",
+  pharmacyText:"Explore pharmacy and medicine services.",
+  diagnostic:"Explore diagnostic services.",profileService:"Manage your personal information.",
+  language:"বাংলা"
+ },
+ bn:{
+  login:"লগইন",register:"রেজিস্ট্রেশন",logout:"লগআউট",
+  heroTitle:"আপনার স্বাস্থ্য,<br>এক প্ল্যাটফর্মে।",
+  heroText:"স্বাস্থ্যতথ্য পরিচালনা করুন, ডাক্তার খুঁজুন, ফার্মেসি দেখুন এবং প্রয়োজনীয় স্বাস্থ্যসেবা নিন একই জায়গা থেকে।",
+  start:"শুরু করুন →",services:"আমাদের সেবাসমূহ",footer:"আপনার স্বাস্থ্যই আমাদের অগ্রাধিকার।",
+  authIntro:"আপনার AmarOsud অ্যাকাউন্টে প্রবেশ করুন।",name:"পূর্ণ নাম",phone:"মোবাইল নম্বর",
+  email:"ইমেইল / Gmail",password:"পাসওয়ার্ড (কমপক্ষে ৮ অক্ষর)",
+  passwordShort:"পাসওয়ার্ড",create:"অ্যাকাউন্ট তৈরি করুন",back:"← হোমে ফিরে যান",
+  switchLogin:"আগে থেকেই অ্যাকাউন্ট আছে?",switchRegister:"অ্যাকাউন্ট নেই?",
+  dashboard:"ড্যাশবোর্ড",profile:"আমার প্রোফাইল",reminders:"ওষুধের রিমাইন্ডার",
+  history:"ওষুধের ইতিহাস",records:"স্বাস্থ্য রেকর্ড",doctors:"ডাক্তার খুঁজুন",
+  pharmacy:"ফার্মেসি",diagnostics:"ডায়াগনস্টিক",settings:"সেটিংস",
+  welcome:"স্বাগতম",welcomeText:"আপনার ব্যক্তিগত স্বাস্থ্যসেবা কেন্দ্র।",
+  profileText:"আপনার অ্যাকাউন্টের তথ্য দেখুন ও পরিচালনা করুন।",
+  save:"পরিবর্তন সংরক্ষণ",saved:"প্রোফাইল সফলভাবে আপডেট হয়েছে।",
+  nameRequired:"আপনার নাম ও মোবাইল নম্বর লিখুন।",
+  phoneInvalid:"বাংলাদেশের সঠিক মোবাইল নম্বর লিখুন।",
+  reminderInfo:"ওষুধের সময়সূচি তৈরি ও পরিচালনা করুন। রিমাইন্ডার শুধু এই ব্রাউজারে থাকবে। নিশ্চিত অ্যালার্ম বা নোটিফিকেশন পাওয়া যাবে না।",
+  reminderTitle:"আপনার ওষুধের রিমাইন্ডার",medicineName:"ওষুধের নাম",
+  medicineTime:"সময়",addReminder:"রিমাইন্ডার যোগ করুন",noReminder:"এখনো কোনো রিমাইন্ডার যোগ করা হয়নি।",
+  delete:"মুছে ফেলুন",reminderSaved:"রিমাইন্ডার এই ডিভাইসে সংরক্ষিত হয়েছে।",
+  reminderRequired:"ওষুধের নাম ও সময় লিখুন।",
+  historyInfo:"নিরাপদ রিমাইন্ডার ডেটাবেস তৈরি হলে ওষুধ গ্রহণের ইতিহাস যুক্ত হবে।",
+  recordsInfo:"প্রেসক্রিপশন ও রিপোর্ট সংরক্ষণের জন্য ব্যক্তিগত ক্লাউড স্টোরেজ ও অতিরিক্ত নিরাপত্তা প্রয়োজন।",
+  doctorsInfo:"ডাক্তার নিবন্ধন ও ডেটাবেস তৈরির পর যাচাইকৃত ডাক্তার ও অ্যাপয়েন্টমেন্ট যুক্ত হবে।",
+  pharmacyInfo:"পরবর্তী সংস্করণে ফার্মেসি নিবন্ধন, ওষুধ অনুসন্ধান, স্টক, মূল্য ও অর্ডার যুক্ত হবে।",
+  diagnosticsInfo:"পরবর্তী সংস্করণে ডায়াগনস্টিক সেন্টার, টেস্ট তালিকা ও বুকিং যুক্ত হবে।",
+  settingsInfo:"আপনার অ্যাকাউন্ট পরিচালনা করুন অথবা লগআউট করুন।",
+  coming:"শিগগিরই আসছে",backDashboard:"← ড্যাশবোর্ডে ফিরে যান",
+  dashboardNote:"AmarOsud এখনো উন্নয়নাধীন। আপাতত প্রকৃত চিকিৎসা-সংক্রান্ত তথ্য বা রিপোর্ট আপলোড করবেন না।",
+  registerSuccess:"অ্যাকাউন্ট তৈরি হয়েছে। ড্যাশবোর্ড খোলা হচ্ছে...",
+  emailConfirm:"অ্যাকাউন্ট তৈরি হয়েছে। লগইনের আগে ইমেইল নিশ্চিত করুন।",
+  loginFailed:"লগইন করা যায়নি।",registerFailed:"রেজিস্ট্রেশন করা যায়নি।",
+  profileError:"প্রোফাইল সংরক্ষণ করা যায়নি: ",reminder:"ওষুধের সময়সূচি পরিচালনা করুন।",
+  health:"প্রেসক্রিপশন ও রিপোর্ট গুছিয়ে রাখুন।",
+  doctor:"ডাক্তার ও অ্যাপয়েন্টমেন্ট সেবা দেখুন.",
+  pharmacyText:"ফার্মেসি ও ওষুধের সেবা দেখুন।",
+  diagnostic:"ডায়াগনস্টিক সেবা দেখুন।",profileService:"আপনার ব্যক্তিগত তথ্য পরিচালনা করুন।",
+  language:"English"
+ }
+};
+
+let lang=localStorage.getItem("amarosud_language")||"en";
+let currentUser=null,currentProfile=null,currentPage="dashboard";
+
+const navItems=[
+ ["🏠","dashboard"],["👤","profile"],["💊","reminders"],
+ ["📚","history"],["📋","records"],["👨‍⚕️","doctors"],
+ ["🏥","pharmacy"],["🧪","diagnostics"],["⚙️","settings"]
 ];
 
-const navItems = [
- ["🏠","Dashboard","dashboard"],
- ["👤","My Profile","profile"],
- ["💊","Medicine Reminder","reminders"],
- ["📚","Medicine History","history"],
- ["📋","Health Records","records"],
- ["👨‍⚕️","Find Doctors","doctors"],
- ["🏥","Pharmacy","pharmacy"],
- ["🧪","Diagnostics","diagnostics"],
- ["⚙️","Settings","settings"]
+const services=[
+ ["💊","reminders","reminder"],
+ ["📋","records","health"],
+ ["👨‍⚕️","doctors","doctor"],
+ ["🏥","pharmacy","pharmacyText"],
+ ["🧪","diagnostics","diagnostic"],
+ ["👤","profile","profileService"]
 ];
 
-let currentUser = null;
-let currentProfile = null;
-
-function el(id){return document.getElementById(id)}
-function showMessage(id,msg,type="success"){
- const box=el(id);box.textContent=msg;box.className="message "+type;box.style.display="block";
+function $(id){return document.getElementById(id)}
+function t(key){return translations[lang][key]||translations.en[key]||key}
+function safe(value){
+ return String(value??"").replace(/[&<>"']/g,c=>({
+  "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+ }[c]));
 }
-function hideMessage(id){el(id).style.display="none"}
+function msg(id,text,type="ok"){
+ const box=$(id);
+ box.textContent=text;
+ box.className="msg "+type;
+ box.style.display="block";
+}
+function hideMsg(id){$(id).style.display="none"}
+
+function toggleLanguage(){
+ lang=lang==="en"?"bn":"en";
+ localStorage.setItem("amarosud_language",lang);
+ document.documentElement.lang=lang;
+ updateLanguage();
+ if(currentUser){renderNav();openPage(currentPage)}
+ else if(!$("authPage").classList.contains("hidden")){
+  showAuth($("registerForm").classList.contains("hidden")?"login":"register");
+ }
+}
+function updateLanguage(){
+ document.querySelectorAll("[data-t]").forEach(node=>{
+  node.innerHTML=t(node.dataset.t);
+ });
+ $("languageBtn").textContent=t("language");
+ renderServices();
+}
+function renderServices(){
+ $("homeServices").innerHTML=services.map(s=>`
+  <div class="card">
+   <div class="icon">${s[0]}</div>
+   <h3>${t(s[1])}</h3><p>${t(s[2])}</p>
+   <button class="btn secondary" onclick="showAuth('login')">${t("login")}</button>
+  </div>`).join("");
+}
 
 function showHome(){
- ["homePage"].forEach(x=>el(x).classList.remove("hidden"));
- el("authPage").classList.add("hidden");
- el("appPage").style.display="none";
- el("topActions").classList.toggle("hidden",!!currentUser);
- el("loggedActions").classList.toggle("hidden",!currentUser);
+ $("homePage").classList.remove("hidden");
+ $("authPage").classList.add("hidden");
+ $("appPage").style.display="none";
+ $("topActions").classList.toggle("hidden",!!currentUser);
+ $("loggedActions").classList.toggle("hidden",!currentUser);
 }
 function showAuth(mode){
- el("homePage").classList.add("hidden");
- el("appPage").style.display="none";
- el("authPage").classList.remove("hidden");
- hideMessage("authMessage");
- const register=mode==="register";
- el("registerForm").classList.toggle("hidden",!register);
- el("loginForm").classList.toggle("hidden",register);
- el("authTitle").textContent=register?"Create Your Account":"Welcome Back";
- el("authSwitch").innerHTML=register?
- 'Already have an account? <span class="link" onclick="showAuth(\\'login\\')">Login</span>':
- 'Don\\'t have an account? <span class="link" onclick="showAuth(\\'register\\')">Register</span>';
+ $("homePage").classList.add("hidden");
+ $("appPage").style.display="none";
+ $("authPage").classList.remove("hidden");
+ hideMsg("authMessage");
+ const isRegister=mode==="register";
+ $("registerForm").classList.toggle("hidden",!isRegister);
+ $("loginForm").classList.toggle("hidden",isRegister);
+ $("authTitle").textContent=isRegister?t("register"):t("welcome");
+ $("authSwitch").innerHTML=isRegister
+  ?`${t("switchLogin")} <span class="link" onclick="showAuth('login')">${t("login")}</span>`
+  :`${t("switchRegister")} <span class="link" onclick="showAuth('register')">${t("register")}</span>`;
 }
+function renderNav(){
+ const html=navItems.map(item=>`
+  <button class="navbtn ${currentPage===item[1]?"active":""}"
+   onclick="openPage('${item[1]}')">${item[0]} ${t(item[1])}</button>
+ `).join("");
+ $("sideNav").innerHTML=html;
+ $("mobileNav").innerHTML=html;
+}
+
 function normalizePhone(value){
  let p=value.replace(/[^0-9+]/g,"");
  if(p.startsWith("+880"))return p;
@@ -204,173 +340,261 @@ function normalizePhone(value){
  if(p.startsWith("0"))return "+88"+p;
  return p;
 }
-function renderServices(){
- el("homeServices").innerHTML=services.map(s=>`
- <div class="card"><div class="service-icon">${s[0]}</div><h3>${s[1]}</h3><p>${s[2]}</p></div>`).join("");
-}
-function renderNav(){
- const html=navItems.map(n=>`<button class="navbtn" data-page="${n[2]}" onclick="openPage('${n[2]}')">${n[0]} ${n[1]}</button>`).join("");
- el("sideNav").innerHTML=html;
- el("mobileNav").innerHTML=html;
-}
+function validPhone(p){return /^\+8801[3-9]\d{8}$/.test(p)}
+
+/* LOAD OR CREATE PROFILE */
 async function ensureProfile(user){
- let {data,error}=await client.from("profiles").select("*").eq("id",user.id).maybeSingle();
+ const {data,error}=await client.from("profiles")
+  .select("*").eq("id",user.id).maybeSingle();
  if(error)throw error;
  if(data)return data;
 
  const meta=user.user_metadata||{};
- const fullName=meta.full_name||user.email?.split("@")[0]||"AmarOsud User";
- const phone=meta.phone||"";
+ const profile={
+  id:user.id,
+  full_name:meta.full_name||user.email?.split("@")[0]||"User",
+  phone:meta.phone||""
+ };
  const {data:created,error:createError}=await client.from("profiles")
-  .insert({id:user.id,phone:phone,full_name:fullName})
-  .select().single();
-
- if(createError){
-  // Profile may not exist yet. Continue with Auth account details.
-  console.warn("Profile creation:",createError.message);
-  return {id:user.id,phone:phone,full_name:fullName};
- }
+  .insert(profile).select().single();
+ if(createError)throw createError;
  return created;
 }
+
+/* ENTER DASHBOARD */
 async function enterApp(user){
  currentUser=user;
  try{
   currentProfile=await ensureProfile(user);
- }catch(err){
-  currentProfile={id:user.id,full_name:user.user_metadata?.full_name||"User",phone:user.user_metadata?.phone||""};
-  console.warn(err);
+ }catch(error){
+  console.error("Profile loading:",error);
+  const meta=user.user_metadata||{};
+  currentProfile={
+   id:user.id,
+   full_name:meta.full_name||user.email?.split("@")[0]||"User",
+   phone:meta.phone||""
+  };
  }
- el("homePage").classList.add("hidden");
- el("authPage").classList.add("hidden");
- el("appPage").style.display="block";
- el("topActions").classList.add("hidden");
- el("loggedActions").classList.remove("hidden");
- const name=currentProfile?.full_name||user.email;
- el("topUser").textContent=name;
- el("sideName").textContent=name;
- el("sideEmail").textContent=user.email||"";
+ $("homePage").classList.add("hidden");
+ $("authPage").classList.add("hidden");
+ $("appPage").style.display="block";
+ $("topActions").classList.add("hidden");
+ $("loggedActions").classList.remove("hidden");
+ $("sideName").textContent=currentProfile.full_name||t("welcome");
+ $("sideEmail").textContent=user.email||"";
  renderNav();
  openPage("dashboard");
 }
+
+/* DASHBOARD PAGES */
 function openPage(page){
  if(!currentUser){showAuth("login");return}
- document.querySelectorAll(".navbtn").forEach(b=>b.classList.toggle("active",b.dataset.page===page));
- const name=currentProfile?.full_name||"User";
+ currentPage=page;
+ renderNav();
+ const name=safe(currentProfile?.full_name||"User");
  let html="";
+
  if(page==="dashboard"){
-  html=`<div class="page-head"><h1>Welcome, ${escapeHTML(name)} 👋</h1><span class="tag">My Dashboard</span></div>
-  <p style="color:var(--muted)">Your personal healthcare space.</p>
-  <div class="grid">
-   <div class="card"><div class="service-icon">💊</div><h3>Medicine Reminder</h3><p>Manage your medicine schedule.</p><button class="btn secondary" onclick="openPage('reminders')">Open</button></div>
-   <div class="card"><div class="service-icon">📋</div><h3>Health Records</h3><p>Keep your health documents organised.</p><button class="btn secondary" onclick="openPage('records')">Open</button></div>
-   <div class="card"><div class="service-icon">👨‍⚕️</div><h3>Find Doctors</h3><p>Explore doctor services.</p><button class="btn secondary" onclick="openPage('doctors')">Explore</button></div>
-   <div class="card"><div class="service-icon">🏥</div><h3>Pharmacy</h3><p>Explore pharmacy services.</p><button class="btn secondary" onclick="openPage('pharmacy')">Explore</button></div>
-   <div class="card"><div class="service-icon">🧪</div><h3>Diagnostics</h3><p>Explore diagnostic services.</p><button class="btn secondary" onclick="openPage('diagnostics')">Explore</button></div>
-   <div class="card"><div class="service-icon">👤</div><h3>My Profile</h3><p>View and update your profile.</p><button class="btn secondary" onclick="openPage('profile')">Open</button></div>
-  </div>
-  <div class="notice" style="margin-top:22px">AmarOsud is under development. Do not upload real medical reports or enter sensitive health information until the required security features are completed.</div>`;
- }else if(page==="profile"){
-  html=`<div class="page-head"><h1>My Profile</h1></div>
-  <div class="card" style="max-width:600px">
-   <div class="field"><label>Full Name</label><input id="profileName" value="${escapeAttr(currentProfile?.full_name||"")}"></div>
-   <div class="field"><label>Mobile Number</label><input id="profilePhone" value="${escapeAttr(currentProfile?.phone||"")}"></div>
-   <div class="field"><label>Email</label><input value="${escapeAttr(currentUser.email||"")}" disabled></div>
-   <button class="btn primary" onclick="saveProfile()">Save Changes</button>
-   <div id="profileMessage" class="message"></div>
-  </div>`;
- }else if(page==="settings"){
-  html=`<div class="page-head"><h1>Settings</h1></div><div class="card"><h3>Account</h3><p>${escapeHTML(currentUser.email||"")}</p><button class="btn outline" onclick="logout()">Logout</button></div>`;
- }else{
-  const item=navItems.find(n=>n[2]===page);
-  const title=item?item[1]:"Service";
-  const details={
-   reminders:["💊","Medicine Reminder","Your medicine schedule feature will be connected after its secure database and reminder system are configured."],
-   history:["📚","Medicine History","Your taken, skipped and missed medicine history will appear here after the reminder module is connected."],
-   records:["📋","Health Records","Prescription storage, test report uploads and report history will be added after secure private file storage is configured."],
-   doctors:["👨‍⚕️","Find Doctors","Verified doctor profiles, specialty search and appointment booking will be connected in a future release."],
-   pharmacy:["🏥","Pharmacy Marketplace","Pharmacy registration, medicine search, stock, pricing and ordering will be developed in the next stage."],
-   diagnostics:["🧪","Diagnostic Services","Diagnostic center profiles, test information, booking and report delivery will be developed in the next stage."]
-  };
-  const d=details[page]||["💚",title,"This section is being prepared."];
-  html=`<div class="page-head"><h1>${d[0]} ${d[1]}</h1><span class="tag">Coming soon</span></div>
-  <div class="card" style="max-width:700px">
-   <h3>${d[1]}</h3><p>${d[2]}</p>
-   <div class="notice">This section is not active yet. We will enable it after setting up the required database, access rules and testing.</div>
-   <button class="btn secondary" style="margin-top:17px" onclick="openPage('dashboard')">← Back to Dashboard</button>
-  </div>`;
+  const items=[
+   ["💊","reminders"],["📋","records"],["👨‍⚕️","doctors"],
+   ["🏥","pharmacy"],["🧪","diagnostics"],["👤","profile"]
+  ];
+  html=`<div class="head"><h1>${t("welcome")}, ${name} 👋</h1><span class="tag">${t("dashboard")}</span></div>
+  <p style="color:var(--m)">${t("welcomeText")}</p>
+  <div class="grid">${items.map(item=>`
+   <div class="card"><div class="icon">${item[0]}</div><h3>${t(item[1])}</h3>
+   <button class="btn secondary" onclick="openPage('${item[1]}')">${t("start")}</button></div>
+  `).join("")}</div>
+  <div class="notice">${t("dashboardNote")}</div>`;
  }
- el("mainContent").innerHTML=html;
+ else if(page==="profile"){
+  html=`<div class="head"><h1>👤 ${t("profile")}</h1></div>
+   <div class="card" style="max-width:620px">
+    <p>${t("profileText")}</p>
+    <div class="field"><label>${t("name")}</label><input id="profileName" maxlength="100" value="${safe(currentProfile?.full_name)}"></div>
+    <div class="field"><label>${t("phone")}</label><input id="profilePhone" value="${safe(currentProfile?.phone)}"></div>
+    <div class="field"><label>${t("email")}</label><input value="${safe(currentUser.email)}" disabled></div>
+    <button class="btn primary" onclick="saveProfile()">${t("save")}</button>
+    <div id="profileMessage" class="msg"></div>
+   </div>`;
+ }
+ else if(page==="reminders"){
+  html=`<div class="head"><h1>💊 ${t("reminders")}</h1></div>
+   <div class="card" style="max-width:700px">
+    <p>${t("reminderInfo")}</p>
+    <form id="reminderForm">
+     <div class="field"><label>${t("medicineName")}</label><input id="medicineName" maxlength="100" required></div>
+     <div class="field"><label>${t("medicineTime")}</label><input id="medicineTime" type="time" required></div>
+     <button class="btn primary" type="submit">${t("addReminder")}</button>
+    </form>
+    <div id="reminderMessage" class="msg"></div>
+    <h3>${t("reminderTitle")}</h3>
+    <div id="reminderList"></div>
+   </div>`;
+ }
+ else if(page==="settings"){
+  html=`<div class="head"><h1>⚙️ ${t("settings")}</h1></div>
+   <div class="card"><p>${t("settingsInfo")}</p>
+   <p>${safe(currentUser.email)}</p>
+   <button class="btn outline" onclick="logout()">${t("logout")}</button></div>`;
+ }
+ else{
+  const info={
+   history:["📚","history","historyInfo"],
+   records:["📋","records","recordsInfo"],
+   doctors:["👨‍⚕️","doctors","doctorsInfo"],
+   pharmacy:["🏥","pharmacy","pharmacyInfo"],
+   diagnostics:["🧪","diagnostics","diagnosticsInfo"]
+  }[page];
+  html=`<div class="head"><h1>${info[0]} ${t(info[1])}</h1><span class="tag">${t("coming")}</span></div>
+   <div class="card" style="max-width:700px">
+    <p>${t(info[2])}</p>
+    <div class="notice">${t("dashboardNote")}</div>
+    <button class="btn secondary" onclick="openPage('dashboard')">${t("backDashboard")}</button>
+   </div>`;
+ }
+ $("mainContent").innerHTML=html;
+ if(page==="reminders")renderReminders();
 }
-function escapeHTML(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
-function escapeAttr(s){return escapeHTML(s)}
+
+/* SAVE PROFILE */
 async function saveProfile(){
- const full_name=el("profileName").value.trim();
- const phone=normalizePhone(el("profilePhone").value.trim());
- if(!full_name||!phone){showMessage("profileMessage","Please enter your name and mobile number.","error");return}
- const {data,error}=await client.from("profiles").update({full_name,phone}).eq("id",currentUser.id).select().single();
- if(error){showMessage("profileMessage",error.message,"error");return}
+ const full_name=$("profileName").value.trim();
+ const phone=normalizePhone($("profilePhone").value.trim());
+ if(!full_name||!phone){msg("profileMessage",t("nameRequired"),"err");return}
+ if(!validPhone(phone)){msg("profileMessage",t("phoneInvalid"),"err");return}
+ const {data,error}=await client.from("profiles")
+  .update({full_name,phone}).eq("id",currentUser.id).select().single();
+ if(error){msg("profileMessage",t("profileError")+error.message,"err");return}
  currentProfile=data;
- el("sideName").textContent=full_name;
- el("topUser").textContent=full_name;
- showMessage("profileMessage","Profile updated successfully.");
+ $("sideName").textContent=full_name;
+ msg("profileMessage",t("saved"));
 }
-async function logout(){
- await client.auth.signOut();
- currentUser=null;currentProfile=null;
- el("appPage").style.display="none";
- el("loggedActions").classList.add("hidden");
- el("topActions").classList.remove("hidden");
- showHome();
+
+/* MEDICINE REMINDERS */
+function reminderKey(){return "amarosud_reminders_"+currentUser.id}
+function getReminders(){
+ try{return JSON.parse(localStorage.getItem(reminderKey())||"[]")}
+ catch(e){return []}
 }
-el("registerForm").addEventListener("submit",async e=>{
- e.preventDefault();hideMessage("authMessage");
- const btn=el("regBtn");btn.disabled=true;btn.textContent="Creating account...";
- const full_name=el("regName").value.trim();
- const phone=normalizePhone(el("regPhone").value.trim());
- const email=el("regEmail").value.trim().toLowerCase();
- const password=el("regPassword").value;
+function saveReminders(items){
+ localStorage.setItem(reminderKey(),JSON.stringify(items));
+}
+function renderReminders(){
+ const list=$("reminderList");
+ if(!list)return;
+ const items=getReminders().sort((a,b)=>a.time.localeCompare(b.time));
+ if(!items.length){list.innerHTML=`<p class="small">${t("noReminder")}</p>`;return}
+ list.innerHTML=items.map(item=>`
+  <div class="item">
+   <div><strong>${safe(item.name)}</strong><br><small>${safe(item.time)}</small></div>
+   <button class="btn outline" onclick="deleteReminder('${safe(item.id)}')">${t("delete")}</button>
+  </div>`).join("");
+}
+function addReminder(event){
+ event.preventDefault();
+ const name=$("medicineName").value.trim();
+ const time=$("medicineTime").value;
+ if(!name||!time){msg("reminderMessage",t("reminderRequired"),"err");return}
+ const items=getReminders();
+ items.push({id:Date.now().toString(),name,time});
+ saveReminders(items);
+ $("reminderForm").reset();
+ msg("reminderMessage",t("reminderSaved"));
+ renderReminders();
+}
+function deleteReminder(id){
+ saveReminders(getReminders().filter(item=>item.id!==id));
+ renderReminders();
+}
+
+/* REGISTER */
+$("registerForm").addEventListener("submit",async event=>{
+ event.preventDefault();
+ hideMsg("authMessage");
+ const btn=$("regBtn");
+ btn.disabled=true;
+ btn.textContent=lang==="bn"?"তৈরি হচ্ছে...":"Creating account...";
+ const full_name=$("regName").value.trim();
+ const phone=normalizePhone($("regPhone").value.trim());
+ const email=$("regEmail").value.trim().toLowerCase();
+ const password=$("regPassword").value;
+
  try{
+  if(!validPhone(phone))throw new Error(t("phoneInvalid"));
   const {data,error}=await client.auth.signUp({
    email,password,
    options:{data:{full_name,phone}}
   });
   if(error)throw error;
   if(data.session&&data.user){
-   try{
-    const {error:profileError}=await client.from("profiles").insert({id:data.user.id,phone,full_name});
-    if(profileError&&profileError.code!=="23505")console.warn(profileError.message);
-   }catch(err){console.warn(err)}
+   const {error:profileError}=await client.from("profiles").insert({
+    id:data.user.id,full_name,phone
+   });
+   if(profileError)console.warn("Profile insert:",profileError.message);
    await enterApp(data.user);
   }else{
-   showMessage("authMessage","Account created. Email confirmation is required before login. Please check your inbox.","success");
    showAuth("login");
-   showMessage("authMessage","Account created. Please log in with your email and password.","success");
+   msg("authMessage",t("emailConfirm"));
   }
- }catch(err){showMessage("authMessage",err.message||"Registration failed.","error")}
- finally{btn.disabled=false;btn.textContent="Create Account"}
-});
-el("loginForm").addEventListener("submit",async e=>{
- e.preventDefault();hideMessage("authMessage");
- const btn=el("loginBtn");btn.disabled=true;btn.textContent="Logging in...";
- try{
-  const email=el("loginEmail").value.trim().toLowerCase();
-  const password=el("loginPassword").value;
-  const {data,error}=await client.auth.signInWithPassword({email,password});
-  if(error)throw error;
-  if(!data.user)throw new Error("Login could not be completed.");
-  await enterApp(data.user);
- }catch(err){showMessage("authMessage",err.message||"Login failed.","error")}
- finally{btn.disabled=false;btn.textContent="Login"}
+ }catch(error){
+  msg("authMessage",error.message||t("registerFailed"),"err");
+ }finally{
+  btn.disabled=false;
+  btn.textContent=t("create");
+ }
 });
 
-async function init(){
- renderServices();
- const {data:{session}}=await client.auth.getSession();
- if(session?.user)await enterApp(session.user);
+/* LOGIN */
+$("loginForm").addEventListener("submit",async event=>{
+ event.preventDefault();
+ hideMsg("authMessage");
+ const btn=$("loginBtn");
+ btn.disabled=true;
+ btn.textContent=lang==="bn"?"লগইন হচ্ছে...":"Logging in...";
+ try{
+  const email=$("loginEmail").value.trim().toLowerCase();
+  const password=$("loginPassword").value;
+  const {data,error}=await client.auth.signInWithPassword({email,password});
+  if(error)throw error;
+  if(!data.user)throw new Error(t("loginFailed"));
+  await enterApp(data.user);
+ }catch(error){
+  msg("authMessage",error.message||t("loginFailed"),"err");
+ }finally{
+  btn.disabled=false;
+  btn.textContent=t("login");
+ }
+});
+
+/* LOGOUT AND SESSION */
+async function logout(){
+ const {error}=await client.auth.signOut();
+ if(error){console.error(error);return}
+ currentUser=null;
+ currentProfile=null;
+ showHome();
 }
 client.auth.onAuthStateChange((event,session)=>{
- if(event==="SIGNED_OUT"){currentUser=null;currentProfile=null;showHome()}
+ if(event==="SIGNED_OUT"){
+  currentUser=null;
+  currentProfile=null;
+  showHome();
+ }
 });
+
+/* START WEBSITE */
+function init(){
+ updateLanguage();
+ showHome();
+ $("mainContent").addEventListener("submit",event=>{
+  if(event.target.id==="reminderForm")addReminder(event);
+ });
+ client.auth.getSession().then(async result=>{
+  if(result.error){console.error(result.error);return}
+  if(result.data.session?.user)await enterApp(result.data.session.user);
+ });
+}
 init();
 </script>
 </body>
