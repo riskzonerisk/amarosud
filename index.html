@@ -1,514 +1,582 @@
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#087f5b">
-<title>AmarOsud | Your Health, Connected</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<style>
-:root{--green:#087f5b;--dark:#064b38;--mint:#e9f7f1;--bg:#f6faf8;--text:#19382e;--muted:#72847b;--line:#e4eee8;--white:#fff}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,"Noto Sans Bengali",sans-serif}
-button,input,select{font:inherit}
-button{cursor:pointer}
-.top{height:70px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 max(calc((100% - 1160px)/2),20px);position:sticky;top:0;z-index:20}
-.logo{font-size:24px;font-weight:800;color:var(--green);letter-spacing:-.7px}
-.logo span{color:var(--text)}
-.actions{display:flex;align-items:center;gap:9px}
-.btn{border:0;border-radius:10px;padding:11px 17px;font-weight:700}
-.primary{background:var(--green);color:white}
-.primary:hover{background:var(--dark)}
-.light{background:var(--mint);color:var(--green)}
-.outline{background:white;border:1px solid var(--line);color:var(--text)}
-.container{max-width:1160px;margin:auto;padding:30px 20px}
-.hero{position:relative;overflow:hidden;border-radius:24px;padding:54px 48px;background:linear-gradient(115deg,#064b38,#087f5b 65%,#27a77d);color:white;display:flex;align-items:center;justify-content:space-between;min-height:300px}
-.hero:after{content:"";position:absolute;width:300px;height:300px;border:1px solid #ffffff30;border-radius:50%;right:9%;top:-100px;box-shadow:0 0 0 35px #ffffff0c,0 0 0 75px #ffffff08}
-.heroText{position:relative;z-index:1;max-width:650px}
-.hero h1{font-size:clamp(32px,5vw,48px);line-height:1.15;margin:0 0 16px;letter-spacing:-1px}
-.hero p{font-size:16px;line-height:1.8;color:#e2f5ec;max-width:560px}
-.hero .btn{background:white;color:var(--green);margin-top:12px}
-.heroArt{font-size:100px;position:relative;z-index:1;margin-right:35px}
-.sectionTitle{display:flex;justify-content:space-between;align-items:center;margin:35px 0 18px}
-.sectionTitle h2{margin:0;font-size:24px}
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:17px}
-.card{background:white;border:1px solid var(--line);border-radius:17px;padding:21px;box-shadow:0 5px 18px #123b2810}
-.serviceIcon{width:52px;height:52px;background:var(--mint);border-radius:15px;display:grid;place-items:center;font-size:27px}
-.card h3{margin:15px 0 7px}
-.card p{font-size:14px;color:var(--muted);line-height:1.7;margin:0 0 16px}
-.card button{font-size:13px}
-.auth{max-width:450px;margin:40px auto;padding:0 15px}
-.authbox{background:white;border:1px solid var(--line);border-radius:20px;padding:27px;box-shadow:0 8px 30px #123b280b}
-.authbox h2{margin:0 0 8px}
-.field{margin:15px 0}
-.field label{display:block;font-size:13px;font-weight:700;margin-bottom:7px}
-.field input,.field select{width:100%;padding:13px;border:1px solid var(--line);border-radius:10px;background:white;outline:none}
-.field input:focus,.field select:focus{border-color:var(--green)}
-.full{width:100%}
-.small{font-size:13px;color:var(--muted);line-height:1.7}
-.msg{display:none;padding:12px;border-radius:10px;margin:12px 0;font-size:13px;line-height:1.6;overflow-wrap:anywhere}
-.ok{background:#e9f7ef;color:#17613f}
-.err{background:#fff0ef;color:#a32c25}
-.link{color:var(--green);font-weight:bold;cursor:pointer}
-.switch{text-align:center;font-size:14px;color:var(--muted);margin-top:16px}
-.hidden{display:none!important}
-.app{display:none;min-height:calc(100vh - 70px)}
-.layout{max-width:1160px;margin:auto;display:flex;min-height:calc(100vh - 70px)}
-.sidebar{width:245px;flex-shrink:0;background:white;border-right:1px solid var(--line);padding:23px 14px}
-.userbox{background:var(--mint);border-radius:13px;padding:14px;margin-bottom:19px;overflow-wrap:anywhere}
-.userbox strong{display:block;margin-bottom:5px}
-.navbtn{display:flex;align-items:center;gap:11px;width:100%;border:0;background:transparent;color:#5d7167;text-align:left;padding:12px;border-radius:10px;margin:3px 0;font-weight:600}
-.navbtn.active,.navbtn:hover{background:var(--mint);color:var(--green)}
-.navicon{width:22px;text-align:center;font-size:18px}
-.main{flex:1;min-width:0;padding:29px}
-.mobileNav{display:none}
-.head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
-.head h1{font-size:25px;margin:0}
-.tag{background:var(--mint);color:var(--green);font-size:11px;font-weight:bold;padding:6px 10px;border-radius:20px}
-.notice{background:#fff8e8;border:1px solid #f0e4c5;color:#74571d;padding:14px;border-radius:12px;font-size:13px;line-height:1.7;margin:18px 0}
-.item{display:flex;justify-content:space-between;align-items:center;gap:12px;border-bottom:1px solid var(--line);padding:13px 0}
-.moreMenu{position:fixed;bottom:75px;right:12px;background:white;border:1px solid var(--line);box-shadow:0 8px 30px #0002;border-radius:15px;padding:10px;width:210px;z-index:30}
-.moreMenu button{display:block;width:100%;text-align:left;border:0;background:white;padding:12px;border-radius:9px;color:var(--text)}
-.moreMenu button:hover{background:var(--mint)}
-footer{text-align:center;color:var(--muted);font-size:13px;padding:28px}
-@media(max-width:800px){
- .top{padding:0 15px}
- .hero{padding:36px 25px;min-height:255px}
- .heroArt{font-size:75px;margin:0}
- .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
- .layout{display:block}
- .sidebar{display:none}
- .main{padding:20px 15px 95px}
- .mobileNav{position:fixed;bottom:0;left:0;right:0;z-index:25;background:white;border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(4,1fr);padding:7px 5px max(7px,env(safe-area-inset-bottom));box-shadow:0 -4px 16px #123b2809}
- .mobileNav .navbtn{display:flex;flex-direction:column;justify-content:center;gap:3px;padding:7px 2px;margin:0;font-size:11px;text-align:center}
- .mobileNav .navicon{font-size:19px}
-}
-@media(max-width:480px){
- .logo{font-size:21px}
- .top{height:62px}
- .hero{padding:30px 22px;border-radius:18px}
- .heroArt{display:none}
- .hero h1{font-size:34px}
- .grid{gap:11px}
- .card{padding:16px}
- .card h3{font-size:15px}
- .card p{font-size:13px}
- .container{padding:20px 13px}
- .main{padding:18px 13px 95px}
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#effaf5">
+  <meta name="description" content="AmarOsud — ডাক্তার, স্বাস্থ্যসেবা ও ব্যক্তিগত স্বাস্থ্যতথ্য এক জায়গায়।">
+  <title>AmarOsud — আপনার সুস্থতার সঙ্গী</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Noto+Sans+Bengali:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    :root{
+      --green:#087f5b;--green-dark:#075c45;--green-soft:#e8f7ef;
+      --mint:#f0fbf5;--ink:#17352b;--muted:#6d8178;--line:#e5eee8;
+      --white:#fff;--shadow:0 18px 55px rgba(24,86,60,.09);
+      --radius:22px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth;scroll-padding-top:90px}
+    body{margin:0;background:#fff;color:var(--ink);font-family:"DM Sans","Noto Sans Bengali",sans-serif}
+    button,input{font:inherit}
+    button,a{-webkit-tap-highlight-color:transparent}
+    button{cursor:pointer}
+    a{color:inherit;text-decoration:none}
+    .bn{font-family:"Noto Sans Bengali","DM Sans",sans-serif}
+    .container{width:min(1160px,calc(100% - 40px));margin:auto}
+    .header{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.9);backdrop-filter:blur(16px);border-bottom:1px solid rgba(229,238,232,.85)}
+    .nav-wrap{height:76px;display:flex;align-items:center;justify-content:space-between;gap:24px}
+    .brand{display:flex;align-items:center;gap:11px;font-size:21px;font-weight:800;letter-spacing:-.7px;color:var(--green-dark)}
+    .brand-mark{width:42px;height:42px;border-radius:15px;background:linear-gradient(145deg,#18aa79,#087451);display:grid;place-items:center;box-shadow:0 8px 18px #087f5b2a}
+    .brand-mark svg{width:25px;height:25px}
+    .nav-links{display:flex;align-items:center;gap:28px;color:#52685e;font-size:13px;font-weight:700}
+    .nav-links a:hover{color:var(--green)}
+    .nav-actions{display:flex;align-items:center;gap:10px}
+    .btn{border:0;border-radius:13px;padding:12px 18px;font-weight:800;font-size:13px;transition:.2s;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+    .btn:hover{transform:translateY(-1px)}
+    .btn-outline{background:#fff;border:1px solid #dcebe2;color:var(--green-dark)}
+    .btn-primary{background:var(--green);color:#fff;box-shadow:0 9px 20px #087f5b26}
+    .btn-primary:hover{background:var(--green-dark)}
+    .btn-light{background:#fff;color:var(--green-dark)}
+    .menu-btn{display:none;border:1px solid var(--line);background:white;border-radius:12px;width:42px;height:42px;font-size:20px;color:var(--green)}
+    .hero{background:linear-gradient(120deg,#effaf4 0%,#e6f7ee 52%,#f6fcf8 100%);overflow:hidden;position:relative}
+    .hero:before,.hero:after{content:"";position:absolute;border-radius:50%;pointer-events:none}
+    .hero:before{width:430px;height:430px;background:#c9edda66;right:-130px;top:-210px}
+    .hero:after{width:250px;height:250px;background:#d8f2e466;left:-130px;bottom:-150px}
+    .hero-grid{position:relative;z-index:1;min-height:570px;display:grid;grid-template-columns:1.02fr .98fr;align-items:center;gap:36px;padding-top:55px;padding-bottom:55px}
+    .eyebrow{display:inline-flex;align-items:center;gap:8px;border:1px solid #cce8d7;background:#ffffffb8;color:var(--green);padding:8px 13px;border-radius:99px;font-size:11px;font-weight:800;letter-spacing:.4px}
+    .eyebrow-dot{width:7px;height:7px;border-radius:50%;background:#16a36f;box-shadow:0 0 0 4px #16a36f20}
+    h1{font-size:clamp(35px,4.7vw,58px);line-height:1.22;letter-spacing:-1.8px;margin:22px 0 17px;color:#123d2d;font-weight:800}
+    h1 .accent{color:var(--green)}
+    .hero-copy{font-family:"Noto Sans Bengali",sans-serif;font-size:16px;line-height:1.95;color:#587267;max-width:540px;margin:0}
+    .hero-actions{display:flex;align-items:center;gap:13px;margin-top:27px;flex-wrap:wrap}
+    .hero-actions .btn{padding:15px 22px;font-size:14px}
+    .trust-line{display:flex;align-items:center;gap:10px;margin-top:25px;color:#71857b;font-size:11px;font-weight:600}
+    .trust-icons{display:flex}
+    .trust-icons span{width:27px;height:27px;border:2px solid #effaf4;border-radius:50%;background:#fff;display:grid;place-items:center;margin-left:-6px;font-size:12px}
+    .trust-icons span:first-child{margin-left:0}
+    .hero-art{width:100%;max-width:540px;justify-self:end;filter:drop-shadow(0 24px 34px rgba(30,104,70,.10))}
+    .section{padding:82px 0}
+    .section-soft{background:#f8fcf9}
+    .section-heading{text-align:center;max-width:650px;margin:0 auto 38px}
+    .section-kicker{color:var(--green);font-size:11px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase}
+    h2{font-size:clamp(26px,3vw,36px);line-height:1.35;margin:12px 0;color:#173d2e;letter-spacing:-.7px}
+    .section-heading p{font-family:"Noto Sans Bengali",sans-serif;color:var(--muted);font-size:14px;line-height:1.9;margin:0}
+    .service-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    .service-card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:25px;box-shadow:0 8px 25px rgba(22,80,52,.035);transition:.2s}
+    .service-card:hover{transform:translateY(-4px);box-shadow:var(--shadow);border-color:#c9e6d5}
+    .service-icon{width:52px;height:52px;border-radius:16px;background:#eaf8f0;display:grid;place-items:center;font-size:24px;margin-bottom:19px}
+    .service-card h3{font-size:17px;margin:0 0 9px}
+    .service-card p{font-family:"Noto Sans Bengali",sans-serif;font-size:12px;line-height:1.85;color:var(--muted);margin:0 0 16px}
+    .text-link{color:var(--green);font-weight:800;font-size:12px}
+    .how-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+    .step{text-align:center;padding:24px 18px}
+    .step-num{width:42px;height:42px;border-radius:14px;background:#e7f7ee;color:var(--green);display:grid;place-items:center;font-weight:800;margin:0 auto 15px}
+    .step h3{font-size:15px;margin:0 0 8px}
+    .step p{font-family:"Noto Sans Bengali",sans-serif;color:var(--muted);font-size:12px;line-height:1.8;margin:0}
+    .cta{background:linear-gradient(115deg,#087f5b,#0b9669);border-radius:26px;padding:43px 48px;color:#fff;display:flex;align-items:center;justify-content:space-between;gap:25px;overflow:hidden;position:relative}
+    .cta:after{content:"+";position:absolute;right:26%;top:-100px;font-size:300px;line-height:1;color:#ffffff0c}
+    .cta h2{color:white;margin:0 0 10px;font-size:29px}
+    .cta p{font-family:"Noto Sans Bengali",sans-serif;color:#d7f3e5;margin:0;font-size:13px;line-height:1.8}
+    .cta .btn{position:relative;z-index:1;white-space:nowrap}
+    footer{background:#102f24;color:#d6e9df;padding:42px 0 22px}
+    .footer-top{display:flex;justify-content:space-between;gap:30px;align-items:flex-start;padding-bottom:28px}
+    .footer-brand{color:#fff}
+    .footer-desc{font-family:"Noto Sans Bengali",sans-serif;color:#a9c2b4;font-size:12px;line-height:1.9;max-width:360px;margin-top:13px}
+    .footer-note{border-top:1px solid #ffffff20;padding-top:18px;color:#9db8a9;font-size:11px;line-height:1.8}
+    .auth-backdrop{position:fixed;inset:0;z-index:60;background:rgba(9,35,25,.55);backdrop-filter:blur(5px);display:none;align-items:center;justify-content:center;padding:18px}
+    .auth-backdrop.show{display:flex}
+    .auth-card{width:min(440px,100%);background:white;border-radius:24px;padding:28px;box-shadow:0 25px 90px #061c1240;position:relative;max-height:calc(100dvh - 36px);overflow:auto}
+    .auth-close{position:absolute;right:17px;top:17px;border:0;background:#f1f7f3;width:35px;height:35px;border-radius:11px;font-size:18px;color:#547064}
+    .auth-logo{width:45px;height:45px;border-radius:15px;background:#e8f7ef;display:grid;place-items:center;color:var(--green);font-size:22px}
+    .auth-card h2{font-size:25px;margin:17px 0 5px}
+    .auth-intro{font-family:"Noto Sans Bengali",sans-serif;color:var(--muted);font-size:12px;line-height:1.8;margin:0 0 20px}
+    .auth-tabs{display:grid;grid-template-columns:1fr 1fr;background:#f1f7f3;padding:4px;border-radius:12px;margin-bottom:18px}
+    .auth-tab{border:0;border-radius:9px;padding:10px;background:transparent;color:#72847a;font-weight:800;font-size:12px}
+    .auth-tab.active{background:#fff;color:var(--green);box-shadow:0 2px 9px #143b2510}
+    .field{margin:13px 0}
+    .field label{display:block;font-size:11px;font-weight:800;color:#405b4c;margin-bottom:7px}
+    .field input{width:100%;height:47px;border:1px solid #dfeae3;border-radius:11px;padding:0 13px;outline:none;color:var(--ink);background:#fcfefc;font-size:13px}
+    .field input:focus{border-color:#69b995;box-shadow:0 0 0 3px #0b966915}
+    .auth-submit{width:100%;height:48px;margin-top:10px}
+    .auth-message{font-family:"Noto Sans Bengali",sans-serif;font-size:12px;line-height:1.7;margin-top:12px;min-height:20px;color:#a14b35}
+    .auth-message.success{color:var(--green)}
+    .auth-foot{font-family:"Noto Sans Bengali",sans-serif;text-align:center;font-size:10px;color:#8a9b91;line-height:1.7;margin-top:14px}
+    .user-panel{display:none;position:fixed;right:18px;top:86px;width:min(340px,calc(100vw - 36px));z-index:45;background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:var(--shadow)}
+    .user-panel.show{display:block}
+    .user-panel h3{margin:0 0 5px;font-size:15px}
+    .user-panel p{margin:0 0 14px;font-size:11px;color:var(--muted);overflow-wrap:anywhere}
+    .user-panel .btn{width:100%}
+    .toast{position:fixed;z-index:90;left:50%;bottom:22px;transform:translateX(-50%);background:#173d2d;color:white;padding:12px 17px;border-radius:12px;font-family:"Noto Sans Bengali",sans-serif;font-size:12px;box-shadow:var(--shadow);display:none;max-width:calc(100% - 30px);text-align:center}
+    .toast.show{display:block}
+    .mobile-nav{display:none}
+    @media(max-width:900px){
+      .nav-links{gap:16px}.hero-grid{min-height:500px;gap:10px}.hero-art{max-width:440px}
+      .service-grid{gap:12px}.service-card{padding:20px}
+    }
+    @media(max-width:700px){
+      .container{width:min(100% - 30px,560px)}
+      .nav-wrap{height:66px}.brand{font-size:19px}.brand-mark{width:38px;height:38px}
+      .nav-links{display:none}.menu-btn{display:block}.nav-actions{gap:7px}.nav-actions .btn{padding:10px 12px;font-size:11px}
+      .hero-grid{grid-template-columns:1fr;min-height:auto;padding-top:47px;padding-bottom:35px;gap:12px}
+      .hero-copy{font-size:14px;line-height:1.9}h1{font-size:clamp(34px,9vw,47px);margin:17px 0 12px;letter-spacing:-1.2px}
+      .hero-art{width:100%;max-width:430px;justify-self:center;margin-top:2px}
+      .hero-actions{margin-top:21px}.hero-actions .btn{padding:13px 17px}
+      .trust-line{margin-top:18px}.section{padding:59px 0}.section-heading{margin-bottom:25px}
+      .service-grid{grid-template-columns:1fr;gap:12px}.service-card{padding:19px;display:grid;grid-template-columns:48px 1fr;column-gap:14px}
+      .service-icon{width:46px;height:46px;grid-row:span 3;margin:0;font-size:21px}
+      .service-card h3{font-size:15px;margin:1px 0 5px}.service-card p{margin-bottom:7px}
+      .how-grid{grid-template-columns:1fr;gap:4px}.step{padding:15px}
+      .cta{padding:29px 23px;display:block;border-radius:21px}.cta h2{font-size:24px}.cta .btn{margin-top:20px}
+      .footer-top{display:block}.footer-top .brand{margin-bottom:12px}
+      .auth-card{padding:24px 20px;border-radius:20px}
+    }
+    @media(max-width:380px){
+      .brand{font-size:17px}.nav-actions .btn{padding:9px 10px}
+      .hero-actions{gap:8px}.hero-actions .btn{font-size:12px;padding:12px 13px}
+      .trust-line{font-size:10px}
+    }
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important}}
+  </style>
 </head>
 <body>
-
-<header class="top">
- <div class="logo">💚 Amar<span>Osud</span></div>
- <div class="actions">
-  <button class="btn outline" id="languageBtn" onclick="toggleLanguage()">বাংলা</button>
-  <div id="guestActions">
-   <button class="btn outline" onclick="showAuth('login')" data-t="login">Login</button>
-   <button class="btn primary" onclick="showAuth('register')" data-t="register">Register</button>
+<header class="header">
+  <div class="container nav-wrap">
+    <a class="brand" href="#home" aria-label="AmarOsud home">
+      <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M9 3h6v6h6v6h-6v6H9v-6H3V9h6V3Z" fill="white"/></svg></span>
+      <span>AmarOsud</span>
+    </a>
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="#home">Home</a><a href="#services">সেবাসমূহ</a><a href="#how">কীভাবে কাজ করে</a><a href="#about">About</a>
+    </nav>
+    <div class="nav-actions">
+      <button class="btn btn-outline" id="loginTop" type="button">Login</button>
+      <button class="btn btn-primary" id="registerTop" type="button">Register</button>
+      <button class="menu-btn" id="menuBtn" type="button" aria-label="Open menu">☰</button>
+    </div>
   </div>
-  <div id="memberActions" class="hidden">
-   <button class="btn outline" onclick="logout()" data-t="logout">Logout</button>
-  </div>
- </div>
+  <nav class="nav-links" id="mobileMenu" style="display:none;padding:0 18px 16px;justify-content:center;flex-wrap:wrap" aria-label="Mobile navigation">
+    <a href="#home">Home</a><a href="#services">সেবাসমূহ</a><a href="#how">কীভাবে কাজ করে</a><a href="#about">About</a>
+  </nav>
 </header>
 
-<section id="homePage">
- <div class="container">
-  <div class="hero">
-   <div class="heroText">
-    <h1 data-t="heroTitle">Your Health,<br>Connected.</h1>
-    <p data-t="heroText">Find doctors, manage medicines, explore pharmacies and access healthcare services — all in one place.</p>
-    <button class="btn" onclick="showAuth('register')" data-t="getStarted">Get Started →</button>
-   </div>
-   <div class="heroArt">🩺</div>
-  </div>
-  <div class="sectionTitle"><h2 data-t="ourServices">Healthcare, made simpler</h2></div>
-  <div class="grid" id="homeServices"></div>
- </div>
- <footer>© 2026 AmarOsud · <span data-t="footer">Your health matters.</span></footer>
-</section>
+<main>
+  <section class="hero" id="home">
+    <div class="container hero-grid">
+      <div class="hero-content">
+        <div class="eyebrow"><span class="eyebrow-dot"></span> SMARTER HEALTHCARE, SIMPLER LIFE</div>
+        <h1 class="bn">আপনার সুস্থতার <span class="accent">সঙ্গী</span>,<br>এখন এক জায়গায়।</h1>
+        <p class="hero-copy">ডাক্তার খোঁজা থেকে Appointment Booking, স্বাস্থ্যতথ্য সংরক্ষণ থেকে প্রয়োজনীয় Healthcare Services—সবকিছু সহজেই, আপনার হাতের মুঠোয়।</p>
+        <div class="hero-actions">
+          <button class="btn btn-primary" id="getStarted" type="button">Get Started <span aria-hidden="true">→</span></button>
+          <a class="btn btn-outline" href="#services">Explore Services</a>
+        </div>
+        <div class="trust-line">
+          <div class="trust-icons"><span>🩺</span><span>💚</span><span>✚</span></div>
+          <span class="bn">আপনার ও পরিবারের স্বাস্থ্যসেবা, আরও সহজভাবে</span>
+        </div>
+      </div>
 
-<section id="authPage" class="hidden">
- <div class="auth">
-  <div class="authbox">
-   <h2 id="authTitle">Welcome Back</h2>
-   <p class="small" data-t="authIntro">One account for all your healthcare needs.</p>
-   <div id="authMessage" class="msg"></div>
-   <form id="registerForm" class="hidden">
-    <div class="field"><label data-t="name">Full Name</label><input id="regName" required maxlength="100"></div>
-    <div class="field"><label data-t="phone">Mobile Number</label><input id="regPhone" required maxlength="20" placeholder="01XXXXXXXXX"></div>
-    <div class="field"><label data-t="email">Email / Gmail</label><input id="regEmail" type="email" required></div>
-    <div class="field"><label data-t="password">Password (minimum 8 characters)</label><input id="regPassword" type="password" minlength="8" required></div>
-    <button class="btn primary full" id="regBtn" type="submit" data-t="create">Create Account</button>
-   </form>
-   <form id="loginForm">
-    <div class="field"><label data-t="email">Email / Gmail</label><input id="loginEmail" type="email" required></div>
-    <div class="field"><label data-t="passwordShort">Password</label><input id="loginPassword" type="password" required></div>
-    <button class="btn primary full" id="loginBtn" type="submit" data-t="login">Login</button>
-   </form>
-   <div class="switch" id="authSwitch"></div>
-   <div class="switch"><span class="link" onclick="showHome()" data-t="backHome">← Back to Home</span></div>
-  </div>
- </div>
-</section>
+      <!-- Custom vector artwork: no stock photo or external image dependency -->
+      <svg class="hero-art" viewBox="0 0 560 470" role="img" aria-label="Healthcare professional with a digital health dashboard illustration" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="artBg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d2f0df"/><stop offset="1" stop-color="#f5fcf7"/></linearGradient>
+          <linearGradient id="coat" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff"/><stop offset="1" stop-color="#dcefe5"/></linearGradient>
+          <linearGradient id="scrub" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#18a878"/><stop offset="1" stop-color="#087451"/></linearGradient>
+          <filter id="softShadow" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="12" stdDeviation="13" flood-color="#377d5b" flood-opacity=".13"/></filter>
+        </defs>
+        <circle cx="282" cy="229" r="198" fill="url(#artBg)"/>
+        <circle cx="282" cy="229" r="163" fill="#e7f7ed"/>
+        <path d="M65 370c57-35 101-24 143-5 50 23 93 20 140-1 51-23 93-19 133 7" fill="none" stroke="#b6dfc7" stroke-width="3" stroke-linecap="round"/>
+        <!-- floating health card -->
+        <g filter="url(#softShadow)" transform="translate(30 95)">
+          <rect width="146" height="105" rx="18" fill="#fff"/>
+          <rect x="15" y="15" width="35" height="35" rx="11" fill="#e5f7ec"/>
+          <path d="M32.5 22v21M22 32.5h21" stroke="#0b9669" stroke-width="4" stroke-linecap="round"/>
+          <rect x="60" y="20" width="67" height="8" rx="4" fill="#d9eae0"/>
+          <rect x="60" y="36" width="48" height="6" rx="3" fill="#edf4ef"/>
+          <path d="M17 78h12l8-12 10 19 9-14 9 7h64" fill="none" stroke="#20a875" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        </g>
+        <!-- doctor body -->
+        <g filter="url(#softShadow)">
+          <path d="M202 383c8-74 28-121 78-133h36c54 13 74 61 82 133H202Z" fill="url(#coat)"/>
+          <path d="M248 254c9-12 20-18 39-18s31 6 41 18l-17 48h-47l-16-48Z" fill="url(#scrub)"/>
+          <path d="m258 261 29 37 29-37 23 122h-104l23-122Z" fill="#fff"/>
+          <path d="m287 298-12 17 12 15 12-15-12-17Z" fill="#d6eee0"/>
+          <path d="M245 258c-25 12-43 31-51 57l-17 62c-3 12 4 21 15 22 10 1 17-5 20-15l24-68 24-29-15-29Z" fill="#f3faf5"/>
+          <path d="M330 258c25 12 43 31 51 57l17 62c3 12-4 21-15 22-10 1-17-5-20-15l-24-68-24-29 15-29Z" fill="#f3faf5"/>
+          <path d="M248 254c-7 20-8 39-2 58l-18 30-18-27c10-28 20-48 38-61Z" fill="#e3f2e9"/>
+          <path d="M326 254c7 20 8 39 2 58l18 30 18-27c-10-28-20-48-38-61Z" fill="#e3f2e9"/>
+          <path d="M263 244c4 14 12 22 24 22s20-8 24-22v-21h-48v21Z" fill="#d99673"/>
+          <ellipse cx="287" cy="177" rx="57" ry="69" fill="#e7ad89"/>
+          <path d="M230 177c-7-55 18-88 62-88 41 0 63 29 57 83-9-8-17-19-20-34-19 17-51 25-87 22-1 7-5 13-12 17Z" fill="#263c34"/>
+          <path d="M235 175c-4 34 9 66 31 78-25-3-43-31-44-61-1-18 4-31 13-39v22Z" fill="#263c34"/>
+          <path d="M339 174c5 32-6 63-28 79 26-4 42-29 44-59 1-17-3-31-11-40l-5 20Z" fill="#263c34"/>
+          <path d="M269 178c5-4 11-4 16 0M300 178c5-4 11-4 16 0" stroke="#5b4035" stroke-width="3" stroke-linecap="round"/>
+          <circle cx="278" cy="188" r="3" fill="#49362f"/><circle cx="308" cy="188" r="3" fill="#49362f"/>
+          <path d="M286 193c-2 8-4 12-1 14" fill="none" stroke="#c27f62" stroke-width="2" stroke-linecap="round"/>
+          <path d="M278 218c7 6 15 6 22 0" fill="none" stroke="#a85d53" stroke-width="3" stroke-linecap="round"/>
+          <path d="M260 300h54" stroke="#b9d9c7" stroke-width="2"/>
+          <rect x="320" y="283" width="22" height="29" rx="5" fill="#fff" stroke="#c7e3d2" stroke-width="2"/>
+          <path d="M331 289v17m-8.5-8.5h17" stroke="#0b9669" stroke-width="2.5" stroke-linecap="round"/>
+        </g>
+        <!-- floating appointment card -->
+        <g filter="url(#softShadow)" transform="translate(375 75)">
+          <rect width="150" height="115" rx="18" fill="#fff"/>
+          <rect x="15" y="15" width="120" height="24" rx="8" fill="#eaf8ef"/>
+          <circle cx="28" cy="27" r="5" fill="#12a16e"/>
+          <rect x="40" y="23" width="77" height="7" rx="3.5" fill="#a9d8bd"/>
+          <rect x="16" y="54" width="32" height="32" rx="10" fill="#dff4e7"/>
+          <path d="M32 61v18M23 70h18" stroke="#0b9669" stroke-width="3" stroke-linecap="round"/>
+          <rect x="58" y="57" width="75" height="7" rx="3.5" fill="#b8d9c5"/>
+          <rect x="58" y="71" width="54" height="6" rx="3" fill="#e6f0e9"/>
+          <rect x="16" y="96" width="117" height="5" rx="2.5" fill="#edf4ef"/>
+        </g>
+        <!-- heart badge -->
+        <g filter="url(#softShadow)" transform="translate(412 282)">
+          <circle cx="43" cy="43" r="39" fill="#fff"/>
+          <path d="M43 67s-25-15-25-31c0-17 21-20 25-5 5-15 26-12 26 5 0 16-26 31-26 31Z" fill="#16a875"/>
+          <path d="M28 43h9l5-9 7 19 5-10h7" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        </g>
+        <circle cx="190" cy="65" r="7" fill="#8ccfac"/><circle cx="460" cy="235" r="5" fill="#8ccfac"/><circle cx="120" cy="300" r="5" fill="#a7dabc"/>
+      </svg>
+    </div>
+  </section>
 
-<section id="appPage" class="app">
- <div class="layout">
-  <aside class="sidebar">
-   <div class="userbox"><strong id="sideName">Welcome</strong><small id="sideEmail"></small></div>
-   <div id="sideNav"></div>
-  </aside>
-  <div style="flex:1;min-width:0">
-   <div class="mobileNav" id="mobileNav"></div>
-   <main class="main" id="mainContent"></main>
+  <section class="section" id="services">
+    <div class="container">
+      <div class="section-heading">
+        <div class="section-kicker">OUR SERVICES</div>
+        <h2 class="bn">আপনার প্রয়োজনীয় স্বাস্থ্যসেবা, এক প্ল্যাটফর্মে</h2>
+        <p>দৈনন্দিন স্বাস্থ্য ব্যবস্থাপনা থেকে চিকিৎসাসেবা খোঁজা—প্রয়োজনীয় বিষয়গুলো সহজে খুঁজে পাওয়ার লক্ষ্যেই AmarOsud।</p>
+      </div>
+      <div class="service-grid">
+        <article class="service-card"><div class="service-icon">🩺</div><h3>ডাক্তার খুঁজুন</h3><p>বিশেষজ্ঞ ডাক্তারদের তথ্য দেখুন এবং ভবিষ্যতে অনলাইনে Appointment নেওয়ার সুবিধা ব্যবহার করুন।</p><a class="text-link" href="#get-in-touch">Explore doctors →</a></article>
+        <article class="service-card"><div class="service-icon">🏥</div><h3>Diagnostic Centre</h3><p>ডায়াগনস্টিক সেন্টার ও প্রয়োজনীয় পরীক্ষা-নিরীক্ষার তথ্য এক জায়গায় পাওয়ার পরিকল্পনা।</p><a class="text-link" href="#get-in-touch">Explore centres →</a></article>
+        <article class="service-card"><div class="service-icon">💊</div><h3>ওষুধ ও স্বাস্থ্যতথ্য</h3><p>আপনার ব্যক্তিগত স্বাস্থ্যতথ্য ও প্রয়োজনীয় নোট নিরাপদে গুছিয়ে রাখার সুবিধা।</p><a class="text-link" href="#get-in-touch">Get started →</a></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-soft" id="how">
+    <div class="container">
+      <div class="section-heading">
+        <div class="section-kicker">GET STARTED</div>
+        <h2 class="bn">শুরু করা খুবই সহজ</h2>
+        <p>একটি অ্যাকাউন্ট থেকেই আপনার AmarOsud অভিজ্ঞতা শুরু করুন।</p>
+      </div>
+      <div class="how-grid">
+        <div class="step"><div class="step-num">01</div><h3>Create an account</h3><p>আপনার নাম, Gmail এবং Password দিয়ে একটি অ্যাকাউন্ট তৈরি করুন।</p></div>
+        <div class="step"><div class="step-num">02</div><h3>Complete your profile</h3><p>আপনার প্রয়োজনীয় প্রোফাইল তথ্য যোগ করে অ্যাকাউন্ট গুছিয়ে নিন।</p></div>
+        <div class="step"><div class="step-num">03</div><h3>Explore healthcare</h3><p>একই অ্যাকাউন্ট ব্যবহার করে AmarOsud-এর সেবাগুলো ব্যবহার করুন।</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="about">
+    <div class="container">
+      <div class="cta" id="get-in-touch">
+        <div><h2 class="bn">স্বাস্থ্যসেবাকে করি আরও সহজ</h2><p>AmarOsud-এর সঙ্গে যুক্ত হোন। আপনার স্বাস্থ্য ব্যবস্থাপনা শুরু হোক এক জায়গা থেকেই।</p></div>
+        <button class="btn btn-light" id="ctaRegister" type="button">Create Account&nbsp; →</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-top">
+      <div><a class="brand footer-brand" href="#home"><span class="brand-mark">✚</span><span>AmarOsud</span></a><p class="footer-desc">আপনার সুস্থতার সঙ্গী। সহজ, সুন্দর ও ব্যবহারবান্ধব Healthcare Experience তৈরিই আমাদের লক্ষ্য।</p></div>
+      <div style="font-size:12px;line-height:2.2;color:#c4dbce"><strong style="color:white">Quick Links</strong><br><a href="#services">সেবাসমূহ</a><br><a href="#how">কীভাবে কাজ করে</a><br><a href="#about">About AmarOsud</a></div>
+    </div>
+    <div class="footer-note">© <span id="year"></span> AmarOsud. All rights reserved. <br>এই প্ল্যাটফর্মের তথ্য সাধারণ সহায়তার জন্য; এটি চিকিৎসকের পরামর্শ বা জরুরি চিকিৎসার বিকল্প নয়।</div>
   </div>
- </div>
-</section>
-<div id="moreMenu" class="moreMenu hidden"></div>
+</footer>
+
+<div class="auth-backdrop" id="authBackdrop" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+  <div class="auth-card">
+    <button class="auth-close" id="authClose" type="button" aria-label="Close">×</button>
+    <div class="auth-logo">✚</div>
+    <h2 id="authTitle">Welcome to AmarOsud</h2>
+    <p class="auth-intro" id="authIntro">আপনার অ্যাকাউন্টে প্রবেশ করুন অথবা নতুন অ্যাকাউন্ট তৈরি করুন।</p>
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tabLogin" type="button">Login</button>
+      <button class="auth-tab" id="tabRegister" type="button">Register</button>
+    </div>
+    <form id="authForm">
+      <div class="field" id="nameField" style="display:none"><label for="fullName">আপনার পূর্ণ নাম</label><input id="fullName" type="text" autocomplete="name" placeholder="যেমন: Tuhin Sikder"></div>
+      <div class="field" id="phoneField" style="display:none"><label for="phone">মোবাইল নম্বর (ঐচ্ছিক)</label><input id="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="01XXXXXXXXX"></div>
+      <div class="field"><label for="email">Gmail Address</label><input id="email" type="email" autocomplete="email" placeholder="name@gmail.com" required></div>
+      <div class="field"><label for="password">Password</label><input id="password" type="password" autocomplete="current-password" minlength="6" placeholder="কমপক্ষে ৬ অক্ষর" required></div>
+      <button class="btn btn-primary auth-submit" id="authSubmit" type="submit">Login to Account</button>
+    </form>
+    <div class="auth-message" id="authMessage" aria-live="polite"></div>
+    <div class="auth-foot">আপনার অ্যাকাউন্টের নিরাপত্তার জন্য Password কারও সঙ্গে শেয়ার করবেন না।</div>
+  </div>
+</div>
+
+<div class="user-panel" id="userPanel">
+  <h3 id="userName">আপনার অ্যাকাউন্ট</h3><p id="userEmail"></p>
+  <button class="btn btn-outline" id="logoutBtn" type="button">Logout</button>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
-"use strict";
+(() => {
+  "use strict";
 
-/* AmarOsud Supabase connection */
-const SUPABASE_URL="https://yzeaqfcjjmebueqedlqe.supabase.co";
-const SUPABASE_KEY="sb_publishable_pvE3TqbjzyYLeM49arRu2Q_IQ5e-Mf0";
-const client=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+  // Existing AmarOsud Supabase project configuration
+  const SUPABASE_URL = "https://yzeaqfcjjmebueqedlqe.supabase.co";
+  const SUPABASE_ANON_KEY = "sb_publishable_pvE3TqbjzyYLeM49arRu2Q_IQ5e-Mf0";
 
-const words={
- en:{
- login:"Login",register:"Register",logout:"Logout",heroTitle:"Your Health,<br>Connected.",
- heroText:"Find doctors, manage medicines, explore pharmacies and access healthcare services — all in one place.",
- getStarted:"Get Started →",ourServices:"Healthcare, made simpler",footer:"Your health matters.",
- authIntro:"One account for all your healthcare needs.",name:"Full Name",phone:"Mobile Number",
- email:"Email / Gmail",password:"Password (minimum 8 characters)",passwordShort:"Password",
- create:"Create Account",backHome:"← Back to Home",switchLogin:"Already have an account?",
- switchRegister:"Don't have an account?",dashboard:"Home",doctors:"Find Doctors",
- appointments:"Appointments",medicine:"Medicine",records:"Health Records",
- pharmacy:"Pharmacy",diagnostics:"Diagnostics",profile:"My Profile",more:"More",
- welcome:"Welcome",welcomeText:"Your personal healthcare dashboard.",
- dashboardTitle:"Your healthcare, all in one place",
- dashboardText:"Use one AmarOsud account to access all available services.",
- doctorText:"Search for doctors by name, specialty and location. Verified doctor listings will appear here when provider registration is enabled.",
- appointmentText:"Your doctor bookings and appointment history will appear here.",
- medicineText:"Manage your medicine schedule on this device.",
- recordsText:"Keep your prescriptions and medical reports organised. Secure cloud storage is not active yet.",
- pharmacyText:"Search pharmacies, compare medicine prices and place orders. Pharmacy services are being prepared.",
- diagnosticText:"Explore diagnostic centres, test prices and booking services. Provider listings are not active yet.",
- profileText:"Manage your personal account information.",
- nameLabel:"Full name",save:"Save changes",saved:"Profile updated.",
- nameError:"Please enter your name and mobile number.",
- phoneError:"Enter a valid Bangladesh mobile number.",
- reminderTitle:"Medicine reminders",medicineName:"Medicine name",time:"Time",
- add:"Add reminder",delete:"Delete",noReminder:"No reminders yet.",
- reminderInfo:"Reminders are stored only in this browser. They do not guarantee alarms or notifications.",
- reminderSaved:"Reminder saved on this device.",required:"Enter a medicine name and time.",
- coming:"Service setup in progress",back:"← Back to Home",
- safety:"AmarOsud is under development. Do not enter real medical information or upload real reports yet.",
- switchToLogin:"Login",switchToRegister:"Register",profileError:"Could not update profile: ",
- registerError:"Registration failed.",loginError:"Login failed.",
- emailConfirm:"Account created. Please confirm your email before logging in.",
- registering:"Creating account...",logging:"Logging in...",language:"বাংলা",
- moreTitle:"More services",settings:"Settings",history:"Medicine history",
- signOut:"Sign out",account:"Your account",oneAccount:"One account · All services"
- },
- bn:{
- login:"লগইন",register:"রেজিস্ট্রেশন",logout:"লগআউট",heroTitle:"আপনার স্বাস্থ্য,<br>এক প্ল্যাটফর্মে।",
- heroText:"ডাক্তার খুঁজুন, ওষুধের সময়সূচি পরিচালনা করুন, ফার্মেসি ও স্বাস্থ্যসেবা ব্যবহার করুন একই জায়গা থেকে।",
- getStarted:"শুরু করুন →",ourServices:"স্বাস্থ্যসেবা এখন আরও সহজ",footer:"আপনার স্বাস্থ্যই আমাদের অগ্রাধিকার।",
- authIntro:"আপনার সব স্বাস্থ্যসেবার জন্য একটি অ্যাকাউন্ট।",name:"পূর্ণ নাম",phone:"মোবাইল নম্বর",
- email:"ইমেইল / Gmail",password:"পাসওয়ার্ড (কমপক্ষে ৮ অক্ষর)",passwordShort:"পাসওয়ার্ড",
- create:"অ্যাকাউন্ট তৈরি করুন",backHome:"← হোমে ফিরে যান",switchLogin:"আগে থেকেই অ্যাকাউন্ট আছে?",
- switchRegister:"অ্যাকাউন্ট নেই?",dashboard:"হোম",doctors:"ডাক্তার খুঁজুন",
- appointments:"অ্যাপয়েন্টমেন্ট",medicine:"ওষুধ",records:"স্বাস্থ্য রেকর্ড",
- pharmacy:"ফার্মেসি",diagnostics:"ডায়াগনস্টিক",profile:"আমার প্রোফাইল",more:"আরও",
- welcome:"স্বাগতম",welcomeText:"আপনার ব্যক্তিগত স্বাস্থ্যসেবা ড্যাশবোর্ড।",
- dashboardTitle:"আপনার সব স্বাস্থ্যসেবা এক জায়গায়",
- dashboardText:"একটি AmarOsud অ্যাকাউন্ট দিয়েই সব চালু সেবা ব্যবহার করুন।",
- doctorText:"নাম, বিশেষত্ব ও অবস্থান দিয়ে ডাক্তার খুঁজুন। ডাক্তার নিবন্ধন চালু হলে যাচাইকৃত ডাক্তারদের তালিকা এখানে দেখা যাবে।",
- appointmentText:"আপনার ডাক্তার বুকিং ও অ্যাপয়েন্টমেন্টের ইতিহাস এখানে দেখা যাবে।",
- medicineText:"এই ডিভাইসে আপনার ওষুধের সময়সূচি পরিচালনা করুন।",
- recordsText:"প্রেসক্রিপশন ও মেডিকেল রিপোর্ট গুছিয়ে রাখুন। নিরাপদ ক্লাউড স্টোরেজ এখনো চালু হয়নি।",
- pharmacyText:"ফার্মেসি খুঁজুন, ওষুধের দাম তুলনা করুন এবং অর্ডার দিন। ফার্মেসি সেবা প্রস্তুত করা হচ্ছে।",
- diagnosticText:"ডায়াগনস্টিক সেন্টার, টেস্টের মূল্য ও বুকিং সেবা দেখুন। সেন্টারের তালিকা এখনো চালু হয়নি।",
- profileText:"আপনার ব্যক্তিগত অ্যাকাউন্টের তথ্য পরিচালনা করুন।",
- nameLabel:"পূর্ণ নাম",save:"পরিবর্তন সংরক্ষণ",saved:"প্রোফাইল আপডেট হয়েছে।",
- nameError:"আপনার নাম ও মোবাইল নম্বর লিখুন।",
- phoneError:"বাংলাদেশের সঠিক মোবাইল নম্বর লিখুন।",
- reminderTitle:"ওষুধের রিমাইন্ডার",medicineName:"ওষুধের নাম",time:"সময়",
- add:"রিমাইন্ডার যোগ করুন",delete:"মুছে ফেলুন",noReminder:"এখনো কোনো রিমাইন্ডার নেই।",
- reminderInfo:"রিমাইন্ডার শুধু এই ব্রাউজারে সংরক্ষিত থাকে। নিশ্চিত অ্যালার্ম বা নোটিফিকেশন পাওয়া যাবে না।",
- reminderSaved:"এই ডিভাইসে রিমাইন্ডার সংরক্ষিত হয়েছে।",required:"ওষুধের নাম ও সময় লিখুন।",
- coming:"সেবা চালুর প্রস্তুতি চলছে",back:"← হোমে ফিরে যান",
- safety:"AmarOsud এখনো উন্নয়নাধীন। আপাতত প্রকৃত চিকিৎসা-সংক্রান্ত তথ্য বা রিপোর্ট আপলোড করবেন না।",
- switchToLogin:"লগইন",switchToRegister:"রেজিস্ট্রেশন",settings:"সেটিংস",
- history:"ওষুধের ইতিহাস",signOut:"লগআউট",account:"আপনার অ্যাকাউন্ট",
- profileError:"প্রোফাইল আপডেট করা যায়নি: ",registerError:"রেজিস্ট্রেশন করা যায়নি।",
- loginError:"লগইন করা যায়নি।",emailConfirm:"অ্যাকাউন্ট তৈরি হয়েছে। লগইনের আগে ইমেইল নিশ্চিত করুন।",
- registering:"অ্যাকাউন্ট তৈরি হচ্ছে...",logging:"লগইন হচ্ছে...",language:"English",
- moreTitle:"অন্যান্য সেবা",oneAccount:"এক অ্যাকাউন্ট · সব সেবা"
- }
-};
+  const $ = (id) => document.getElementById(id);
+  const backdrop = $("authBackdrop");
+  let authMode = "login";
+  let supabaseClient = null;
+  let currentUser = null;
+  let toastTimer = null;
 
-let lang=localStorage.getItem("amarosud_language")||"en";
-let currentUser=null,currentProfile=null,currentPage="dashboard";
-
-const primaryNav=[
- ["🏠","dashboard"],["👨‍⚕️","doctors"],["📅","appointments"],["💊","medicine"]
-];
-const extraNav=[
- ["📋","records"],["🏥","pharmacy"],["🧪","diagnostics"],
- ["👤","profile"],["📚","history"],["⚙️","settings"]
-];
-const services=[
- ["👨‍⚕️","doctors","doctorText"],
- ["📅","appointments","appointmentText"],
- ["💊","medicine","medicineText"],
- ["📋","records","recordsText"],
- ["🏥","pharmacy","pharmacyText"],
- ["🧪","diagnostics","diagnosticText"]
-];
-function $(id){return document.getElementById(id)}
-function t(key){return words[lang][key]||words.en[key]||key}
-function safe(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
-function showMsg(id,text,type="ok"){const e=$(id);e.textContent=text;e.className="msg "+type;e.style.display="block"}
-function hideMsg(id){$(id).style.display="none"}
-
-function toggleLanguage(){
- lang=lang==="en"?"bn":"en";
- localStorage.setItem("amarosud_language",lang);
- document.documentElement.lang=lang;
- updateLanguage();
- if(currentUser){renderNav();openPage(currentPage)}
- else if(!$("authPage").classList.contains("hidden")){
-  showAuth($("registerForm").classList.contains("hidden")?"login":"register");
- }
-}
-function updateLanguage(){
- document.querySelectorAll("[data-t]").forEach(e=>e.innerHTML=t(e.dataset.t));
- $("languageBtn").textContent=t("language");
- renderHomeServices();
-}
-function renderHomeServices(){
- $("homeServices").innerHTML=services.map(s=>`
- <div class="card">
-  <div class="serviceIcon">${s[0]}</div>
-  <h3>${t(s[1])}</h3><p>${t(s[2])}</p>
-  <button class="btn light" onclick="showAuth('login')">${t("login")} →</button>
- </div>`).join("");
-}
-function showHome(){
- $("homePage").classList.remove("hidden");
- $("authPage").classList.add("hidden");
- $("appPage").style.display="none";
- $("guestActions").classList.toggle("hidden",!!currentUser);
- $("memberActions").classList.toggle("hidden",!currentUser);
- $("moreMenu").classList.add("hidden");
-}
-function showAuth(mode){
- $("homePage").classList.add("hidden");
- $("appPage").style.display="none";
- $("authPage").classList.remove("hidden");
- hideMsg("authMessage");
- const register=mode==="register";
- $("registerForm").classList.toggle("hidden",!register);
- $("loginForm").classList.toggle("hidden",register);
- $("authTitle").textContent=register?t("register"):t("welcome");
- $("authSwitch").innerHTML=register
-  ?`${t("switchLogin")} <span class="link" id="switchAuth">${t("switchToLogin")}</span>`
-  :`${t("switchRegister")} <span class="link" id="switchAuth">${t("switchToRegister")}</span>`;
- $("switchAuth").onclick=()=>showAuth(register?"login":"register");
-}
-function renderNav(){
- const button=(item)=>`<button class="navbtn ${currentPage===item[1]?"active":""}" onclick="openPage('${item[1]}')"><span class="navicon">${item[0]}</span><span>${t(item[1])}</span></button>`;
- $("sideNav").innerHTML=primaryNav.concat(extraNav).map(button).join("");
- $("mobileNav").innerHTML=primaryNav.map(button).join("")+
- `<button class="navbtn" onclick="toggleMore()"><span class="navicon">☰</span><span>${t("more")}</span></button>`;
- $("moreMenu").innerHTML=`<strong style="display:block;padding:10px">${t("moreTitle")}</strong>`+
- extraNav.map(item=>`<button onclick="openPage('${item[1]}');toggleMore()">${item[0]} ${t(item[1])}</button>`).join("");
-}
-function toggleMore(){$("moreMenu").classList.toggle("hidden")}
-function normalizePhone(value){
- let p=value.replace(/[^0-9+]/g,"");
- if(p.startsWith("+880"))return p;
- if(p.startsWith("880"))return "+"+p;
- if(p.startsWith("0"))return "+88"+p;
- return p;
-}
-function validPhone(p){return /^\+8801[3-9]\d{8}$/.test(p)}
-
-async function ensureProfile(user){
- const {data,error}=await client.from("profiles").select("*").eq("id",user.id).maybeSingle();
- if(error)throw error;
- if(data)return data;
- const meta=user.user_metadata||{};
- const profile={id:user.id,full_name:meta.full_name||user.email?.split("@")[0]||"User",phone:meta.phone||""};
- const {data:created,error:createError}=await client.from("profiles").insert(profile).select().single();
- if(createError)throw createError;
- return created;
-}
-async function enterApp(user){
- currentUser=user;
- try{currentProfile=await ensureProfile(user)}
- catch(e){
-  console.error("Profile:",e);
-  const meta=user.user_metadata||{};
-  currentProfile={id:user.id,full_name:meta.full_name||user.email?.split("@")[0]||"User",phone:meta.phone||""};
- }
- $("homePage").classList.add("hidden");
- $("authPage").classList.add("hidden");
- $("appPage").style.display="block";
- $("guestActions").classList.add("hidden");
- $("memberActions").classList.remove("hidden");
- $("sideName").textContent=currentProfile.full_name||t("welcome");
- $("sideEmail").textContent=user.email||"";
- renderNav();
- openPage("dashboard");
-}
-
-function openPage(page){
- if(!currentUser){showAuth("login");return}
- currentPage=page;
- $("moreMenu").classList.add("hidden");
- renderNav();
- const name=safe(currentProfile?.full_name||"");
- let html="";
- if(page==="dashboard"){
-  html=`<div class="head"><h1>${t("welcome")}, ${name} 👋</h1><span class="tag">${t("oneAccount")}</span></div>
-  <h2>${t("dashboardTitle")}</h2><p class="small">${t("dashboardText")}</p>
-  <div class="grid" style="margin-top:22px">${services.map(s=>`
-   <div class="card"><div class="serviceIcon">${s[0]}</div><h3>${t(s[1])}</h3>
-   <p>${t(s[2])}</p><button class="btn light" onclick="openPage('${s[1]}')">${t("getStarted")}</button></div>`).join("")}</div>
-  <div class="notice">${t("safety")}</div>`;
- }else if(page==="profile"){
-  html=`<div class="head"><h1>👤 ${t("profile")}</h1></div><div class="card" style="max-width:620px">
-  <p>${t("profileText")}</p>
-  <div class="field"><label>${t("nameLabel")}</label><input id="profileName" maxlength="100" value="${safe(currentProfile?.full_name)}"></div>
-  <div class="field"><label>${t("phone")}</label><input id="profilePhone" value="${safe(currentProfile?.phone)}"></div>
-  <div class="field"><label>${t("email")}</label><input value="${safe(currentUser.email)}" disabled></div>
-  <button class="btn primary" onclick="saveProfile()">${t("save")}</button><div id="profileMessage" class="msg"></div></div>`;
- }else if(page==="medicine"){
-  html=`<div class="head"><h1>💊 ${t("reminderTitle")}</h1></div><div class="card" style="max-width:700px">
-  <p class="small">${t("reminderInfo")}</p>
-  <form id="reminderForm">
-   <div class="field"><label>${t("medicineName")}</label><input id="medicineName" maxlength="100" required></div>
-   <div class="field"><label>${t("time")}</label><input id="medicineTime" type="time" required></div>
-   <button class="btn primary" type="submit">${t("add")}</button>
-  </form><div id="reminderMessage" class="msg"></div><div id="reminderList"></div></div>`;
- }else if(page==="settings"){
-  html=`<div class="head"><h1>⚙️ ${t("settings")}</h1></div><div class="card">
-  <p>${t("account")}: ${safe(currentUser.email)}</p><button class="btn outline" onclick="logout()">${t("logout")}</button></div>`;
- }else if(page==="history"){
-  html=servicePage("📚","history","historyInfo","Medicine history will be available after secure database setup.");
- }else{
-  const content={
-   doctors:["👨‍⚕️","doctors","doctorText"],
-   appointments:["📅","appointments","appointmentText"],
-   records:["📋","records","recordsText"],
-   pharmacy:["🏥","pharmacy","pharmacyText"],
-   diagnostics:["🧪","diagnostics","diagnosticText"]
-  }[page];
-  html=servicePage(content[0],content[1],content[2]);
- }
- $("mainContent").innerHTML=html;
- if(page==="medicine")renderReminders();
-}
-function servicePage(icon,title,description){
- return `<div class="head"><h1>${icon} ${t(title)}</h1><span class="tag">${t("coming")}</span></div>
- <div class="card" style="max-width:720px"><p>${t(description)}</p>
- <div class="notice">${t("safety")}</div>
- <button class="btn light" onclick="openPage('dashboard')">${t("back")}</button></div>`;
-}
-
-async function saveProfile(){
- const full_name=$("profileName").value.trim();
- const phone=normalizePhone($("profilePhone").value.trim());
- if(!full_name||!phone){showMsg("profileMessage",t("nameError"),"err");return}
- if(!validPhone(phone)){showMsg("profileMessage",t("phoneError"),"err");return}
- const {data,error}=await client.from("profiles").update({full_name,phone}).eq("id",currentUser.id).select().single();
- if(error){showMsg("profileMessage",t("profileError")+error.message,"err");return}
- currentProfile=data;
- $("sideName").textContent=full_name;
- showMsg("profileMessage",t("saved"));
-}
-
-function reminderKey(){return "amarosud_reminders_"+currentUser.id}
-function getReminders(){try{return JSON.parse(localStorage.getItem(reminderKey())||"[]")}catch(e){return []}}
-function saveReminders(items){localStorage.setItem(reminderKey(),JSON.stringify(items))}
-function renderReminders(){
- const list=$("reminderList");if(!list)return;
- const items=getReminders().sort((a,b)=>a.time.localeCompare(b.time));
- if(!items.length){list.innerHTML=`<p class="small">${t("noReminder")}</p>`;return}
- list.innerHTML=items.map(item=>`<div class="item"><div><strong>${safe(item.name)}</strong><br><small>${safe(item.time)}</small></div>
- <button class="btn outline" onclick="deleteReminder('${safe(item.id)}')">${t("delete")}</button></div>`).join("");
-}
-function addReminder(event){
- event.preventDefault();
- const name=$("medicineName").value.trim(),time=$("medicineTime").value;
- if(!name||!time){showMsg("reminderMessage",t("required"),"err");return}
- const items=getReminders();items.push({id:Date.now().toString(),name,time});
- saveReminders(items);$("reminderForm").reset();
- showMsg("reminderMessage",t("reminderSaved"));renderReminders();
-}
-function deleteReminder(id){saveReminders(getReminders().filter(x=>x.id!==id));renderReminders()}
-
-$("registerForm").addEventListener("submit",async event=>{
- event.preventDefault();hideMsg("authMessage");
- const btn=$("regBtn");btn.disabled=true;btn.textContent=t("registering");
- const full_name=$("regName").value.trim();
- const phone=normalizePhone($("regPhone").value.trim());
- const email=$("regEmail").value.trim().toLowerCase();
- const password=$("regPassword").value;
- try{
-  if(!validPhone(phone))throw new Error(t("phoneError"));
-  const {data,error}=await client.auth.signUp({email,password,options:{data:{full_name,phone}}});
-  if(error)throw error;
-  if(data.session&&data.user){
-   const {error:profileError}=await client.from("profiles").upsert({id:data.user.id,full_name,phone});
-   if(profileError)throw profileError;
-   await enterApp(data.user);
-  }else{
-   showAuth("login");showMsg("authMessage",t("emailConfirm"));
+  function toast(message) {
+    const el = $("toast");
+    el.textContent = message;
+    el.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => el.classList.remove("show"), 3200);
   }
- }catch(e){showMsg("authMessage",e.message||t("registerError"),"err")}
- finally{btn.disabled=false;btn.textContent=t("create")}
-});
 
-$("loginForm").addEventListener("submit",async event=>{
- event.preventDefault();hideMsg("authMessage");
- const btn=$("loginBtn");btn.disabled=true;btn.textContent=t("logging");
- try{
-  const email=$("loginEmail").value.trim().toLowerCase();
-  const password=$("loginPassword").value;
-  const {data,error}=await client.auth.signInWithPassword({email,password});
-  if(error)throw error;
-  if(!data.user)throw new Error(t("loginError"));
-  await enterApp(data.user);
- }catch(e){showMsg("authMessage",e.message||t("loginError"),"err")}
- finally{btn.disabled=false;btn.textContent=t("login")}
-});
+  function setMessage(message, success = false) {
+    const el = $("authMessage");
+    el.textContent = message;
+    el.classList.toggle("success", success);
+  }
 
-async function logout(){
- const {error}=await client.auth.signOut();
- if(error){alert(error.message);return}
- currentUser=null;currentProfile=null;showHome();
-}
-client.auth.onAuthStateChange((event,session)=>{
- if(event==="SIGNED_OUT"){currentUser=null;currentProfile=null;showHome()}
-});
-function init(){
- updateLanguage();showHome();
- $("mainContent").addEventListener("submit",event=>{
-  if(event.target.id==="reminderForm")addReminder(event);
- });
- client.auth.getSession().then(async({data,error})=>{
-  if(error){console.error(error);return}
-  if(data.session?.user)await enterApp(data.session.user);
- });
-}
-init();
+  function openAuth(mode = "login") {
+    setAuthMode(mode);
+    backdrop.classList.add("show");
+    $("userPanel").classList.remove("show");
+    setTimeout(() => $(mode === "register" ? "fullName" : "email").focus(), 80);
+  }
+
+  function closeAuth() {
+    backdrop.classList.remove("show");
+    setMessage("");
+  }
+
+  function setAuthMode(mode) {
+    authMode = mode;
+    const registering = mode === "register";
+    $("nameField").style.display = registering ? "block" : "none";
+    $("phoneField").style.display = registering ? "block" : "none";
+    $("tabLogin").classList.toggle("active", !registering);
+    $("tabRegister").classList.toggle("active", registering);
+    $("authTitle").textContent = registering ? "Create your account" : "Welcome back";
+    $("authIntro").textContent = registering
+      ? "আপনার তথ্য দিয়ে AmarOsud-এ নতুন অ্যাকাউন্ট তৈরি করুন।"
+      : "আপনার AmarOsud অ্যাকাউন্টে প্রবেশ করুন।";
+    $("authSubmit").textContent = registering ? "Create Account" : "Login to Account";
+    $("password").autocomplete = registering ? "new-password" : "current-password";
+    setMessage("");
+  }
+
+  function setLoading(loading) {
+    const button = $("authSubmit");
+    button.disabled = loading;
+    button.style.opacity = loading ? ".7" : "1";
+    button.textContent = loading ? "Please wait…" : (authMode === "register" ? "Create Account" : "Login to Account");
+  }
+
+  function friendlyError(error) {
+    const msg = (error && error.message) ? error.message : "";
+    if (/invalid login credentials/i.test(msg)) return "Gmail অথবা Password সঠিক নয়। আবার চেষ্টা করুন।";
+    if (/already registered|user already registered/i.test(msg)) return "এই Gmail দিয়ে আগে থেকেই অ্যাকাউন্ট খোলা আছে। Login করুন।";
+    if (/password should be at least/i.test(msg)) return "Password কমপক্ষে ৬ অক্ষরের হতে হবে।";
+    if (/email not confirmed/i.test(msg)) return "Email verification চালু আছে। Supabase Auth settings-এ Email Confirmations বন্ধ আছে কি না দেখুন।";
+    if (/fetch|network/i.test(msg)) return "ইন্টারনেট সংযোগ পরীক্ষা করে আবার চেষ্টা করুন।";
+    return msg || "দুঃখিত, কাজটি সম্পন্ন হয়নি। আবার চেষ্টা করুন।";
+  }
+
+  async function saveProfile(user, fullName, phone) {
+    if (!user || !supabaseClient) return;
+    const payload = { id: user.id, full_name: fullName || user.user_metadata?.full_name || "" };
+    if (phone) payload.phone = phone;
+    // New accounts use INSERT, matching the existing per-user INSERT RLS policy.
+    const { error } = await supabaseClient.from("profiles").insert(payload);
+    if (error) {
+      // Authentication remains valid if the profile policy/schema needs adjustment.
+      console.warn("Profile save warning:", error.message);
+    }
+  }
+
+  async function loadProfile(user) {
+    if (!user || !supabaseClient) return null;
+    const { data, error } = await supabaseClient
+      .from("profiles")
+      .select("full_name, phone")
+      .eq("id", user.id)
+      .maybeSingle();
+    if (error) {
+      console.warn("Profile read warning:", error.message);
+      return null;
+    }
+    return data;
+  }
+
+  function showSignedIn(user, profile = null) {
+    currentUser = user;
+    $("loginTop").style.display = "none";
+    $("registerTop").textContent = "My Account";
+    $("registerTop").classList.remove("btn-primary");
+    $("registerTop").classList.add("btn-outline");
+    $("userName").textContent = profile?.full_name || user.user_metadata?.full_name || "আপনার অ্যাকাউন্ট";
+    $("userEmail").textContent = [user.email || "", profile?.phone || ""].filter(Boolean).join(" · ");
+    closeAuth();
+  }
+
+  function showSignedOut() {
+    currentUser = null;
+    $("loginTop").style.display = "";
+    $("registerTop").textContent = "Register";
+    $("registerTop").classList.add("btn-primary");
+    $("registerTop").classList.remove("btn-outline");
+    $("userPanel").classList.remove("show");
+  }
+
+  async function handleAuth(event) {
+    event.preventDefault();
+    if (!supabaseClient) {
+      setMessage("Supabase সংযোগ পাওয়া যাচ্ছে না। পেজটি Refresh করে আবার চেষ্টা করুন।");
+      return;
+    }
+
+    const email = $("email").value.trim();
+    const password = $("password").value;
+    const fullName = $("fullName").value.trim();
+    const phone = $("phone").value.trim();
+
+    if (!email || !password) {
+      setMessage("Gmail এবং Password লিখুন।");
+      return;
+    }
+    if (authMode === "register" && !fullName) {
+      setMessage("আপনার পূর্ণ নাম লিখুন।");
+      $("fullName").focus();
+      return;
+    }
+
+    setLoading(true);
+    try {
+      if (authMode === "register") {
+        const { data, error } = await supabaseClient.auth.signUp({
+          email,
+          password,
+          options: { data: { full_name: fullName } }
+        });
+        if (error) throw error;
+
+        if (data.user && data.session) {
+          await saveProfile(data.user, fullName, phone);
+          const profile = await loadProfile(data.user);
+          showSignedIn(data.user, profile);
+          toast("আপনার অ্যাকাউন্ট তৈরি হয়েছে। স্বাগতম!");
+        } else if (data.user) {
+          setMessage("অ্যাকাউন্ট তৈরি হয়েছে। Email confirmation চালু থাকলে Gmail থেকে verify করে Login করুন।", true);
+          setAuthMode("login");
+          $("email").value = email;
+        } else {
+          setMessage("অ্যাকাউন্ট তৈরি করা যায়নি। আবার চেষ্টা করুন।");
+        }
+      } else {
+        const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+        if (error) throw error;
+        const profile = await loadProfile(data.user);
+        showSignedIn(data.user, profile);
+        toast("সফলভাবে Login হয়েছে। স্বাগতম!");
+      }
+    } catch (error) {
+      console.error("Authentication error:", error);
+      setMessage(friendlyError(error));
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function logout() {
+    if (!supabaseClient) return;
+    const { error } = await supabaseClient.auth.signOut();
+    if (error) {
+      toast(friendlyError(error));
+      return;
+    }
+    showSignedOut();
+    toast("আপনি Logout করেছেন।");
+  }
+
+  async function init() {
+    $("year").textContent = new Date().getFullYear();
+
+    if (!window.supabase || !window.supabase.createClient) {
+      console.error("Supabase JS library did not load.");
+      $("loginTop").disabled = true;
+      $("registerTop").disabled = true;
+      return;
+    }
+
+    try {
+      supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+        auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
+      });
+
+      const { data, error } = await supabaseClient.auth.getSession();
+      if (error) throw error;
+      if (data.session?.user) {
+        const profile = await loadProfile(data.session.user);
+        showSignedIn(data.session.user, profile);
+      }
+
+      supabaseClient.auth.onAuthStateChange((_event, session) => {
+        if (session?.user) {
+          currentUser = session.user;
+          $("loginTop").style.display = "none";
+          $("registerTop").textContent = "My Account";
+          $("registerTop").classList.remove("btn-primary");
+          $("registerTop").classList.add("btn-outline");
+        } else {
+          showSignedOut();
+        }
+      });
+    } catch (error) {
+      console.error("Supabase initialization error:", error);
+      toast("Supabase সংযোগে সমস্যা হয়েছে।");
+    }
+  }
+
+  $("loginTop").addEventListener("click", () => currentUser ? $("userPanel").classList.toggle("show") : openAuth("login"));
+  $("registerTop").addEventListener("click", () => currentUser ? $("userPanel").classList.toggle("show") : openAuth("register"));
+  $("getStarted").addEventListener("click", () => currentUser ? $("userPanel").classList.toggle("show") : openAuth("register"));
+  $("ctaRegister").addEventListener("click", () => currentUser ? $("userPanel").classList.toggle("show") : openAuth("register"));
+  $("authClose").addEventListener("click", closeAuth);
+  $("tabLogin").addEventListener("click", () => setAuthMode("login"));
+  $("tabRegister").addEventListener("click", () => setAuthMode("register"));
+  $("authForm").addEventListener("submit", handleAuth);
+  $("logoutBtn").addEventListener("click", logout);
+  backdrop.addEventListener("click", (event) => { if (event.target === backdrop) closeAuth(); });
+  document.addEventListener("keydown", (event) => { if (event.key === "Escape") { closeAuth(); $("userPanel").classList.remove("show"); } });
+
+  $("menuBtn").addEventListener("click", () => {
+    const menu = $("mobileMenu");
+    const open = menu.style.display === "flex";
+    menu.style.display = open ? "none" : "flex";
+    $("menuBtn").textContent = open ? "☰" : "×";
+  });
+  $("mobileMenu").querySelectorAll("a").forEach(link => link.addEventListener("click", () => {
+    $("mobileMenu").style.display = "none";
+    $("menuBtn").textContent = "☰";
+  }));
+
+  init();
+})();
 </script>
 </body>
 </html>
