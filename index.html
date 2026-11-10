@@ -5,371 +5,328 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AmarOsud | Your Health, Our Priority</title>
-<meta name="description" content="AmarOsud - Your personal healthcare companion. Manage medicines, find doctors and healthcare services.">
-
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-:root {
-  --green: #087f5b;
-  --dark: #075c45;
-  --light: #e9f7f1;
-  --text: #18352d;
-  --muted: #6b8179;
-  --white: #ffffff;
-}
-* { margin:0; padding:0; box-sizing:border-box; }
-html { scroll-behavior:smooth; }
-body {
-  font-family: Arial, "Noto Sans Bengali", sans-serif;
-  color:var(--text);
-  background:#f8fbf9;
-  line-height:1.6;
-}
-a { text-decoration:none; color:inherit; }
-.container { width:90%; max-width:1150px; margin:auto; }
-
-/* Navigation */
-header {
-  background:rgba(255,255,255,.96);
-  position:sticky; top:0; z-index:100;
-  box-shadow:0 2px 15px rgba(0,0,0,.04);
-}
-nav {
-  min-height:76px; display:flex;
-  justify-content:space-between; align-items:center;
-}
-.logo { display:flex; align-items:center; gap:9px; }
-.logo svg { width:42px; height:42px; }
-.logo strong { font-size:24px; color:var(--dark); }
-.logo span { color:var(--green); }
-.nav-links { display:flex; align-items:center; gap:27px; }
-.nav-links a { font-size:14px; font-weight:600; }
-.nav-links a:hover { color:var(--green); }
-.btn {
-  display:inline-block; background:var(--green);
-  color:white; padding:12px 23px;
-  border-radius:9px; font-weight:700;
-  transition:.25s; border:0; cursor:pointer;
-}
-.btn:hover { background:var(--dark); transform:translateY(-2px); }
-.menu-btn {
-  display:none; border:0; background:none;
-  font-size:27px; color:var(--dark);
-}
-
-/* Hero */
-.hero { padding:75px 0 85px; background:linear-gradient(120deg,#effaf4,#f8fbf9); }
-.hero-grid {
-  display:grid; grid-template-columns:1fr 1fr;
-  align-items:center; gap:50px;
-}
-.tag {
-  display:inline-block; background:#d9f3e7;
-  color:var(--dark); padding:7px 14px;
-  border-radius:30px; font-size:13px; font-weight:700;
-  margin-bottom:20px;
-}
-.hero h1 { font-size:clamp(36px,5vw,57px); line-height:1.18; margin-bottom:20px; }
-.hero h1 span { color:var(--green); }
-.hero p { color:var(--muted); font-size:17px; margin-bottom:28px; max-width:510px; }
-.hero-image {
-  position:relative; border-radius:25px; overflow:hidden;
-  box-shadow:0 20px 50px rgba(8,80,55,.13);
-}
-.hero-image img { width:100%; height:390px; object-fit:cover; display:block; }
-.image-note {
-  position:absolute; bottom:18px; left:18px;
-  background:white; padding:13px 17px;
-  border-radius:12px; font-size:14px; font-weight:700;
-  box-shadow:0 5px 20px #0001;
-}
-
-/* Trust strip */
-.trust { padding:25px 0; background:white; }
-.trust-grid {
-  display:grid; grid-template-columns:repeat(3,1fr);
-  text-align:center; gap:20px;
-}
-.trust-item strong { display:block; color:var(--green); font-size:18px; }
-.trust-item small { color:var(--muted); }
-
-/* Sections */
-section.content-section { padding:75px 0; }
-.section-heading { text-align:center; margin-bottom:42px; }
-.section-heading h2 { font-size:34px; margin-bottom:10px; }
-.section-heading p { color:var(--muted); }
-.services {
-  display:grid; grid-template-columns:repeat(3,1fr); gap:22px;
-}
-.service-card {
-  background:white; padding:28px 24px;
-  border-radius:17px; border:1px solid #e8f0eb;
-  transition:.25s;
-}
-.service-card:hover {
-  transform:translateY(-6px);
-  box-shadow:0 15px 35px rgba(0,80,50,.08);
-}
-.service-icon {
-  width:55px; height:55px; border-radius:14px;
-  display:grid; place-items:center;
-  background:var(--light); font-size:27px;
-  margin-bottom:18px;
-}
-.service-card h3 { margin-bottom:9px; font-size:19px; }
-.service-card p { color:var(--muted); font-size:14px; margin-bottom:17px; }
-.learn { color:var(--green); font-size:14px; font-weight:700; }
-
-/* About */
-.about-grid {
-  display:grid; grid-template-columns:1fr 1fr;
-  align-items:center; gap:45px;
-}
-.about-image img {
-  width:100%; height:340px; object-fit:cover;
-  border-radius:20px;
-}
-.about-text h2 { font-size:32px; margin-bottom:15px; }
-.about-text p { color:var(--muted); margin-bottom:18px; }
-.feature { margin:12px 0; font-weight:600; }
-.feature span { color:var(--green); margin-right:8px; }
-
-/* CTA */
-.cta {
-  background:linear-gradient(120deg,#087f5b,#07543f);
-  color:white; padding:48px 25px;
-  border-radius:22px; text-align:center;
-}
-.cta h2 { font-size:30px; margin-bottom:10px; }
-.cta p { opacity:.88; margin-bottom:22px; }
-.cta .btn { background:white; color:var(--dark); }
-
-/* Footer */
-footer { background:#102e25; color:white; padding:48px 0 20px; }
-.footer-grid {
-  display:grid; grid-template-columns:2fr 1fr 1fr;
-  gap:35px; margin-bottom:35px;
-}
-footer p, footer a { color:#c2d4cc; font-size:14px; }
-footer h3 { margin-bottom:13px; }
-footer a { display:block; margin:8px 0; }
-.copyright {
-  border-top:1px solid #ffffff22;
-  padding-top:18px; text-align:center;
-  color:#c2d4cc; font-size:13px;
-}
-
-/* Mobile */
-@media(max-width:800px) {
-  .menu-btn { display:block; }
-  .nav-links {
-    display:none; position:absolute; top:76px;
-    left:0; width:100%; background:white;
-    padding:22px 5%; flex-direction:column;
-    align-items:flex-start; gap:18px;
-    box-shadow:0 10px 20px #0001;
-  }
-  .nav-links.show { display:flex; }
-  .hero { padding:48px 0; }
-  .hero-grid, .about-grid { grid-template-columns:1fr; }
-  .hero-image img { height:280px; }
-  .services { grid-template-columns:1fr; }
-  .trust-grid { grid-template-columns:1fr; gap:18px; }
-  .footer-grid { grid-template-columns:1fr; }
-  section.content-section { padding:55px 0; }
-  .section-heading h2 { font-size:28px; }
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#f7faf8;color:#18352d;line-height:1.6}
+.container{width:90%;max-width:1100px;margin:auto}
+header{background:white;padding:16px 0;box-shadow:0 2px 12px #0001}
+nav{display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:25px;font-weight:bold;color:#075c45}
+.logo span{color:#0b9b6b}
+button,.btn{background:#087f5b;color:white;border:0;padding:12px 20px;border-radius:8px;cursor:pointer;font-weight:bold;text-decoration:none}
+button:hover,.btn:hover{background:#075c45}
+.hero{padding:65px 0;background:#eaf7f0}
+.hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:35px;align-items:center}
+.hero h1{font-size:45px;line-height:1.2;margin-bottom:18px}
+.hero h1 span{color:#087f5b}
+.hero p{color:#60756b;margin-bottom:25px}
+.hero img{width:100%;height:300px;object-fit:cover;border-radius:20px}
+section{padding:55px 0}
+.heading{text-align:center;margin-bottom:30px}
+.heading h2{font-size:30px}
+.heading p{color:#718078}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.card{background:white;padding:25px;border-radius:14px;border:1px solid #e5eee8}
+.card .emoji{font-size:30px;margin-bottom:10px}
+.card p{color:#718078;font-size:14px;margin-top:8px}
+.auth-section{background:#eaf7f0}
+.auth-box{background:white;max-width:480px;margin:auto;padding:28px;border-radius:16px;box-shadow:0 8px 30px #0001}
+.auth-box h2{text-align:center;margin-bottom:20px}
+input{width:100%;padding:13px;margin:8px 0 15px;border:1px solid #d9e5dd;border-radius:8px;font-size:15px}
+label{font-size:14px;font-weight:bold}
+.auth-box button{width:100%;margin-top:8px}
+.switch{text-align:center;margin-top:18px;font-size:14px}
+.switch a{color:#087f5b;font-weight:bold;cursor:pointer}
+.message{margin:12px 0;padding:10px;border-radius:8px;font-size:14px;display:none}
+.error{background:#ffe9e9;color:#a52a2a}
+.success{background:#e3f7ec;color:#075c45}
+.dashboard{max-width:650px;margin:auto;background:white;padding:28px;border-radius:16px}
+.profile-item{padding:14px 0;border-bottom:1px solid #e7eee9}
+footer{background:#102e25;color:white;text-align:center;padding:30px}
+.small{font-size:12px;color:#718078;margin-top:12px}
+@media(max-width:700px){
+.hero-grid{grid-template-columns:1fr}
+.hero h1{font-size:36px}
+.cards{grid-template-columns:1fr}
+.hero img{height:230px}
 }
 </style>
 </head>
-
 <body>
 
 <header>
-  <div class="container">
-    <nav>
-      <a href="#" class="logo">
-        <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect x="5" y="5" width="90" height="90" rx="25" fill="#087F5B"/>
-          <path d="M50 23V77M23 50H77" stroke="white" stroke-width="13" stroke-linecap="round"/>
-          <path d="M68 20C80 20 86 29 84 40C73 43 63 39 61 30C60 26 63 22 68 20Z" fill="#B7F0D4"/>
-        </svg>
-        <strong>Amar<span>Osud</span></strong>
-      </a>
-
-      <button class="menu-btn" onclick="toggleMenu()" aria-label="Open menu">☰</button>
-
-      <div class="nav-links" id="navLinks">
-        <a href="#home" onclick="closeMenu()">Home</a>
-        <a href="#services" onclick="closeMenu()">Services</a>
-        <a href="#about" onclick="closeMenu()">About Us</a>
-        <a href="#contact" onclick="closeMenu()">Contact</a>
-        <a href="#account" class="btn" onclick="closeMenu()">Login / Register</a>
-      </div>
-    </nav>
-  </div>
+<div class="container">
+<nav>
+<div class="logo">✚ Amar<span>Osud</span></div>
+<a href="#account" class="btn" id="navAccount">Login / Register</a>
+</nav>
+</div>
 </header>
 
 <main>
-<section class="hero" id="home">
-  <div class="container hero-grid">
-    <div>
-      <span class="tag">YOUR PERSONAL HEALTHCARE COMPANION</span>
-      <h1>Your Health,<br><span>Our Priority.</span></h1>
-      <p>
-        আপনার স্বাস্থ্য ব্যবস্থাপনা হোক আরও সহজ।
-        ওষুধের সময় মনে রাখা থেকে শুরু করে ডাক্তার ও
-        ডায়াগনস্টিক সেবা খুঁজে পাওয়া—সব এক জায়গায়।
-      </p>
-      <a href="#services" class="btn">Explore Services →</a>
-    </div>
-
-    <div class="hero-image">
-      <img
-        src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1000&q=85"
-        alt="Healthcare professional providing medical care">
-      <div class="image-note">💚 Healthcare Made Easier</div>
-    </div>
-  </div>
+<section class="hero">
+<div class="container hero-grid">
+<div>
+<p><b>YOUR PERSONAL HEALTHCARE COMPANION</b></p>
+<h1>Your Health,<br><span>Our Priority.</span></h1>
+<p>আপনার স্বাস্থ্য ব্যবস্থাপনা হোক আরও সহজ। প্রয়োজনীয় স্বাস্থ্যসেবা ও ব্যক্তিগত স্বাস্থ্যতথ্য রাখুন এক জায়গায়।</p>
+<a href="#services" class="btn">Explore Services →</a>
+</div>
+<img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&w=1000&q=85" alt="Healthcare">
+</div>
 </section>
 
-<div class="trust">
-  <div class="container trust-grid">
-    <div class="trust-item">
-      <strong>Personal Health</strong>
-      <small>Manage your health records</small>
-    </div>
-    <div class="trust-item">
-      <strong>Easy Access</strong>
-      <small>Explore healthcare services</small>
-    </div>
-    <div class="trust-item">
-      <strong>One Platform</strong>
-      <small>Your healthcare companion</small>
-    </div>
-  </div>
+<section id="services">
+<div class="container">
+<div class="heading">
+<h2>Our Healthcare Services</h2>
+<p>আপনার প্রয়োজনীয় স্বাস্থ্যসেবা, একই প্ল্যাটফর্মে।</p>
+</div>
+<div class="cards">
+<div class="card"><div class="emoji">💊</div><h3>Medicine Management</h3><p>ওষুধের তালিকা ও সময় ব্যবস্থাপনা।</p></div>
+<div class="card"><div class="emoji">👨‍⚕️</div><h3>Find a Doctor</h3><p>চিকিৎসক ও কনসালটেশন সেবা খুঁজুন।</p></div>
+<div class="card"><div class="emoji">🧪</div><h3>Diagnostic Services</h3><p>ডায়াগনস্টিক সেন্টারের তথ্য খুঁজুন।</p></div>
+<div class="card"><div class="emoji">📋</div><h3>Health Records</h3><p>প্রেসক্রিপশন ও রিপোর্ট সংরক্ষণ করুন।</p></div>
+<div class="card"><div class="emoji">🏥</div><h3>Online Pharmacy</h3><p>ফার্মেসি ও ওষুধের তথ্য খুঁজুন।</p></div>
+<div class="card"><div class="emoji">🤖</div><h3>AI Health Assistant</h3><p>স্বাস্থ্যতথ্য বুঝতে সহায়তা নিন।</p></div>
+</div>
+</div>
+</section>
+
+<section class="auth-section" id="account">
+<div class="container">
+
+<div class="auth-box" id="registerBox">
+<h2>Create Your Account</h2>
+<div class="message error" id="regError"></div>
+<div class="message success" id="regSuccess"></div>
+
+<form id="registerForm">
+<label>Full Name</label>
+<input id="fullName" type="text" placeholder="Enter your full name" required>
+
+<label>Mobile Number</label>
+<input id="phone" type="tel" placeholder="01XXXXXXXXX" required>
+
+<label>Gmail / Email Address</label>
+<input id="regEmail" type="email" placeholder="Enter your email" required>
+
+<label>Password</label>
+<input id="regPassword" type="password" minlength="6" placeholder="At least 6 characters" required>
+
+<button type="submit" id="registerBtn">Create Account</button>
+</form>
+<div class="switch">Already have an account? <a id="showLogin">Login</a></div>
+<p class="small">By registering, you agree to use AmarOsud responsibly. Use a valid email address and a strong password.</p>
 </div>
 
-<section class="content-section" id="services">
-  <div class="container">
-    <div class="section-heading">
-      <h2>Our Healthcare Services</h2>
-      <p>আপনার প্রয়োজনীয় স্বাস্থ্যসেবা, একই প্ল্যাটফর্মে।</p>
-    </div>
+<div class="auth-box" id="loginBox" style="display:none">
+<h2>Welcome Back</h2>
+<div class="message error" id="loginError"></div>
+<div class="message success" id="loginSuccess"></div>
 
-    <div class="services">
-      <div class="service-card">
-        <div class="service-icon">💊</div>
-        <h3>Medicine Management</h3>
-        <p>ওষুধের তালিকা, ডোজ এবং নিয়মিত ওষুধ গ্রহণের হিসাব রাখুন।</p>
-        <a href="#account" class="learn">Explore Service →</a>
-      </div>
+<form id="loginForm">
+<label>Email Address</label>
+<input id="loginEmail" type="email" placeholder="Enter your email" required>
 
-      <div class="service-card">
-        <div class="service-icon">👨‍⚕️</div>
-        <h3>Find a Doctor</h3>
-        <p>আপনার প্রয়োজন অনুযায়ী চিকিৎসক ও কনসালটেশন সেবা খুঁজুন।</p>
-        <a href="#account" class="learn">Explore Service →</a>
-      </div>
+<label>Password</label>
+<input id="loginPassword" type="password" placeholder="Enter your password" required>
 
-      <div class="service-card">
-        <div class="service-icon">🧪</div>
-        <h3>Diagnostic Services</h3>
-        <p>ডায়াগনস্টিক সেন্টার ও বিভিন্ন পরীক্ষার তথ্য খুঁজুন।</p>
-        <a href="#account" class="learn">Explore Service →</a>
-      </div>
+<button type="submit" id="loginBtn">Login</button>
+</form>
+<div class="switch">New to AmarOsud? <a id="showRegister">Create Account</a></div>
+</div>
 
-      <div class="service-card">
-        <div class="service-icon">📋</div>
-        <h3>Health Records</h3>
-        <p>প্রেসক্রিপশন ও মেডিকেল রিপোর্ট এক জায়গায় সংরক্ষণ করুন।</p>
-        <a href="#account" class="learn">Explore Service →</a>
-      </div>
+<div class="dashboard" id="dashboard" style="display:none">
+<h2>Welcome to AmarOsud! 💚</h2>
+<p>Your personal dashboard</p>
+<div class="profile-item"><b>Full Name:</b> <span id="profileName">-</span></div>
+<div class="profile-item"><b>Email:</b> <span id="profileEmail">-</span></div>
+<div class="profile-item"><b>Mobile:</b> <span id="profilePhone">-</span></div>
+<p style="margin:18px 0">Your healthcare journey starts here.</p>
+<button id="logoutBtn">Logout</button>
+</div>
 
-      <div class="service-card">
-        <div class="service-icon">🏥</div>
-        <h3>Online Pharmacy</h3>
-        <p>ফার্মেসি ও ওষুধের প্রাপ্যতা সম্পর্কে তথ্য খুঁজুন।</p>
-        <a href="#account" class="learn">Explore Service →</a>
-      </div>
-
-      <div class="service-card">
-        <div class="service-icon">🤖</div>
-        <h3>AI Health Assistant</h3>
-        <p>স্বাস্থ্যসংক্রান্ত তথ্য বুঝতে এবং উপযুক্ত বিশেষজ্ঞের বিভাগ খুঁজতে সহায়তা।</p>
-        <a href="#account" class="learn">Explore Service →</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="content-section" id="about" style="background:white;">
-  <div class="container about-grid">
-    <div class="about-image">
-      <img
-        src="https://images.unsplash.com/photo-1584982751601-97dcc096659c?auto=format&fit=crop&w=1000&q=85"
-        alt="Medical professional working with healthcare records">
-    </div>
-    <div class="about-text">
-      <span class="tag">ABOUT AMAROSUD</span>
-      <h2>Healthcare, Simplified.</h2>
-      <p>
-        AmarOsud-এর লক্ষ্য হলো ব্যক্তিগত স্বাস্থ্য ব্যবস্থাপনা
-        এবং প্রয়োজনীয় স্বাস্থ্যসেবার তথ্য সহজে মানুষের কাছে পৌঁছে দেওয়া।
-      </p>
-      <div class="feature"><span>✓</span> Personal health management</div>
-      <div class="feature"><span>✓</span> Healthcare service discovery</div>
-      <div class="feature"><span>✓</span> A convenient digital experience</div>
-    </div>
-  </div>
-</section>
-
-<section class="content-section" id="account">
-  <div class="container">
-    <div class="cta">
-      <h2>Take a Better Step for Your Health</h2>
-      <p>AmarOsud-এর সঙ্গে আপনার স্বাস্থ্য ব্যবস্থাপনাকে আরও সহজ করুন।</p>
-      <a href="#home" class="btn">Get Started →</a>
-    </div>
-  </div>
+</div>
 </section>
 </main>
 
-<footer id="contact">
-  <div class="container">
-    <div class="footer-grid">
-      <div>
-        <div class="logo" style="margin-bottom:15px;">
-          <strong style="color:white;">Amar<span>Osud</span></strong>
-        </div>
-        <p>Your personal healthcare companion.</p>
-        <p>স্বাস্থ্যসেবাকে আরও সহজ ও সবার নাগালে পৌঁছে দেওয়াই আমাদের লক্ষ্য।</p>
-      </div>
-      <div>
-        <h3>Quick Links</h3>
-        <a href="#home">Home</a>
-        <a href="#services">Services</a>
-        <a href="#about">About Us</a>
-      </div>
-      <div>
-        <h3>Our Services</h3>
-        <a href="#services">Medicine Management</a>
-        <a href="#services">Find a Doctor</a>
-        <a href="#services">Diagnostic Services</a>
-      </div>
-    </div>
-    <div class="copyright">
-      © 2026 AmarOsud. All rights reserved.
-    </div>
-  </div>
+<footer>
+<h3>AmarOsud</h3>
+<p>Your Health, Our Priority.</p>
+<p>© 2026 AmarOsud. All rights reserved.</p>
 </footer>
 
 <script>
-function toggleMenu() {
-  document.getElementById("navLinks").classList.toggle("show");
-}
-function closeMenu() {
-  document.getElementById("navLinks").classList.remove("show");
-}
-</script>
+const SUPABASE_URL = "https://yzeaqfcjjmebueqedlqe.supabase.co";
+const SUPABASE_KEY = "sb_publishable_pvE3TqbjzyYLeM49arRu2Q_IQ5e-Mf0";
 
+const client = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+const $ = id => document.getElementById(id);
+
+function showMessage(id, message) {
+  const el = $(id);
+  el.textContent = message;
+  el.style.display = "block";
+}
+
+function clearMessages() {
+  ["regError","regSuccess","loginError","loginSuccess"].forEach(id => {
+    $(id).style.display = "none";
+  });
+}
+
+function showLogin() {
+  clearMessages();
+  $("registerBox").style.display = "none";
+  $("loginBox").style.display = "block";
+  $("dashboard").style.display = "none";
+}
+
+function showRegister() {
+  clearMessages();
+  $("registerBox").style.display = "block";
+  $("loginBox").style.display = "none";
+  $("dashboard").style.display = "none";
+}
+
+$("showLogin").onclick = showLogin;
+$("showRegister").onclick = showRegister;
+$("navAccount").onclick = () => {
+  document.getElementById("account").scrollIntoView();
+};
+
+function normalizePhone(value) {
+  let p = value.replace(/[\s-]/g, "");
+  if (/^01[3-9]\d{8}$/.test(p)) return "+88" + p;
+  if (/^8801[3-9]\d{8}$/.test(p)) return "+" + p;
+  return p;
+}
+
+$("registerForm").addEventListener("submit", async event => {
+  event.preventDefault();
+  clearMessages();
+
+  const fullName = $("fullName").value.trim();
+  const phone = normalizePhone($("phone").value);
+  const email = $("regEmail").value.trim().toLowerCase();
+  const password = $("regPassword").value;
+
+  if (!/^\+8801[3-9]\d{8}$/.test(phone)) {
+    showMessage("regError","বাংলাদেশের সঠিক মোবাইল নম্বর দিন। যেমন: 017XXXXXXXX");
+    return;
+  }
+
+  $("registerBtn").disabled = true;
+  $("registerBtn").textContent = "Creating account...";
+
+  try {
+    const {data, error} = await client.auth.signUp({
+      email,
+      password
+    });
+
+    if (error) throw error;
+    if (!data.user) throw new Error("Account could not be created.");
+
+    if (!data.session) {
+      showMessage("regSuccess","Account তৈরি হয়েছে। এখন Login করুন।");
+      showLogin();
+      showMessage("loginSuccess","আপনার Account তৈরি হয়েছে। Login করুন।");
+      return;
+    }
+
+    const {error: profileError} = await client
+      .from("profiles")
+      .insert({
+        id: data.user.id,
+        phone: phone,
+        full_name: fullName
+      });
+
+    if (profileError) throw profileError;
+
+    showMessage("regSuccess","Account সফলভাবে তৈরি হয়েছে!");
+    await loadDashboard(data.user);
+  } catch (error) {
+    showMessage("regError",error.message);
+  } finally {
+    $("registerBtn").disabled = false;
+    $("registerBtn").textContent = "Create Account";
+  }
+});
+
+$("loginForm").addEventListener("submit", async event => {
+  event.preventDefault();
+  clearMessages();
+
+  $("loginBtn").disabled = true;
+  $("loginBtn").textContent = "Logging in...";
+
+  try {
+    const {data,error} = await client.auth.signInWithPassword({
+      email: $("loginEmail").value.trim().toLowerCase(),
+      password: $("loginPassword").value
+    });
+
+    if (error) throw error;
+    await loadDashboard(data.user);
+  } catch (error) {
+    showMessage("loginError",error.message);
+  } finally {
+    $("loginBtn").disabled = false;
+    $("loginBtn").textContent = "Login";
+  }
+});
+
+async function loadDashboard(user) {
+  const {data,error} = await client
+    .from("profiles")
+    .select("full_name,phone")
+    .eq("id",user.id)
+    .maybeSingle();
+
+  if (error) {
+    showMessage("loginError","Profile load failed: " + error.message);
+    return;
+  }
+
+  if (!data) {
+    showMessage("loginError","Profile পাওয়া যায়নি। Support প্রয়োজন হতে পারে।");
+    return;
+  }
+
+  $("profileName").textContent = data.full_name || "-";
+  $("profileEmail").textContent = user.email || "-";
+  $("profilePhone").textContent = data.phone || "-";
+
+  $("registerBox").style.display = "none";
+  $("loginBox").style.display = "none";
+  $("dashboard").style.display = "block";
+}
+
+$("logoutBtn").onclick = async () => {
+  const {error} = await client.auth.signOut();
+  if (error) {
+    alert(error.message);
+    return;
+  }
+  showLogin();
+};
+
+async function checkSession() {
+  const {data} = await client.auth.getSession();
+  if (data.session) {
+    await loadDashboard(data.session.user);
+  }
+}
+
+checkSession();
+</script>
 </body>
 </html>
